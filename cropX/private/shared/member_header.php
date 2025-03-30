@@ -16,13 +16,11 @@
       <h1>CropX Member Profile</h1>
     </header>
 
-    <navigation>
+    <nav>
       <ul>
         <li>User:
           <?php
-            // TODO: Check for if session is set, if is, display the username
             echo $_SESSION['username'] ?? '';
-            // End of TODO
           ?>
 
         </li>
@@ -30,4 +28,4 @@
         <li><a href="<?php echo url_for('/member/register.php'); ?>">Register</a></li>
         <li><a href="<?php echo url_for('/member/logout.php'); ?>">Logout</a></li>
       </ul>
-    </navigation>
+    </nav>

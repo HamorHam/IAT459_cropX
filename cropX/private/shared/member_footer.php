@@ -1,5 +1,5 @@
 <footer>
-  &copy; <?php echo date('Y'); ?> <a style="color: white;" href="<?php echo url_for('/index.php?') ?>">CropX</a>
+  &copy; <?php echo date('Y'); ?> <a href="<?php echo url_for('/index.php?') ?>">CropX</a>
 </footer>
 
 </body>
