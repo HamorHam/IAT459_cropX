@@ -46,9 +46,9 @@ if (is_post_request()) {
   <?php echo display_errors($errors); ?>
 
   <form action="login.php" method="post">
-    Username:<br />
+    <label for="username">Username:</label>
     <input type="text" name="username" value="" required /><br />
-    Password:<br />
+    <label for="password">Password:</label>
     <input type="password" name="password" value="" required /><br />
     <input type="submit" value="Login" />
   </form>

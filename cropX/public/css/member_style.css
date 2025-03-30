@@ -1,34 +1,29 @@
-/* Reset some basics */
-body, h1, h2, h3, p, ul {
-    margin: 0;
-    padding: 0;
-  }
-  
-  body {
+/* Base styles */
+body {
     font-family: 'Segoe UI', sans-serif;
-    background: #f4fff1;
+    background-color: #f0fff0;
     color: #2d3a2d;
     line-height: 1.6;
-    padding: 0;
     margin: 0;
+    padding: 0;
   }
   
+  /* Header */
   header {
     background: #6cbf3b;
     color: white;
     padding: 20px 40px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  }
-
-  body {
-    background-color: #f0fff0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
   header h1 {
     font-size: 28px;
     font-weight: 600;
+    margin: 0;
+    text-align: center;
   }
   
+  /* Navigation */
   nav {
     background: #cdeac0;
     padding: 10px 40px;
@@ -46,76 +41,62 @@ body, h1, h2, h3, p, ul {
     text-decoration: underline;
   }
   
-  main {
-    padding: 40px;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  
-  .card {
-    background: white;
-    border: 1px solid #d0e6c7;
+  /* Main Content Area */
+  #content {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border: 1px solid #cdeac0;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    padding: 20px;
-    margin-bottom: 20px;
-    transition: box-shadow 0.3s ease;
-  }
-  
-  .card:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  }
-  
-  .card h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
-    color: #467c33;
-  }
-  
-  footer {
     text-align: center;
-    padding: 20px;
-    background: #e7f9dc;
-    color: #506f47;
-    font-size: 14px;
-    margin-top: 40px;
-    border-top: 1px solid #cdeac0;
   }
   
-  button, .button-link {
-    background: #6cbf3b;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
+ /* Title inside content */
+#content h1 {
+    color: #467c33;
+    margin-bottom: 30px;
+  }
+  
+  /* Form Styling */
+  #content form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  #content label {
     font-weight: bold;
-    transition: background 0.3s ease;
+    color: #3b5c36;
+    margin-bottom: 5px;
+    text-align: left;
+    width: 80%;
   }
   
-  button:hover, .button-link:hover {
-    background: #5aaa31;
-  }
-  
-  .button-link {
-    text-decoration: none;
-    display: inline-block;
-  }
-  
-  form input, form select {
-    display: block;
-    margin-bottom: 15px;
-    padding: 10px;
-    width: 100%;
-    border: 1px solid #cdeac0;
+  #content form input[type="text"],
+  #content form input[type="email"],
+  #content form input[type="password"],
+  #content form input[type="submit"] {
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #a5d6a7;
     border-radius: 8px;
     font-size: 16px;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
   }
   
-  form label {
+  #content form input[type="submit"] {
+    background-color: #6cbf3b;
+    color: white;
     font-weight: bold;
-    margin-bottom: 5px;
-    display: block;
-    color: #3b5c36;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  #content form input[type="submit"]:hover {
+    background-color: #5aaa31;
   }
   

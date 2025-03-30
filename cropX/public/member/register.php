@@ -62,17 +62,17 @@ if (is_post_request()) {
   <?php echo display_errors($errors); ?>
 
   <form action="register.php" method="post">
-    Email:<br />
+    <label for="email">Email:</label>
     <input type="text" name="email" required /><br />
-    Username:<br />
+    <label for="username">Username:</label>
     <input type="text" name="username" required /><br />
-    Password:<br />
+    <label for="password">Password:</label>
     <input type="password" name="password" required /><br />
-    Confirm Password:<br />
+    <label for="password_confirm">Confirm Password:</label>
     <input type="password" name="password_confirm" required /><br />
-    Latitude:<br />
+    <label for="latitude">Latitude:</label>
     <input type="text" name="latitude" required /><br />
-    Longitude:<br />
+    <label for="longitude">Longitude:</label>
     <input type="text" name="longitude" required /><br />
     <input type="submit" value="Register" />
   </form>
