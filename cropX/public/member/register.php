@@ -54,7 +54,7 @@ if (is_post_request()) {
 ?>
 
 <?php $page_title = 'Register'; ?>
-<?php include(SHARED_PATH . '/staff_header.php'); ?>
+<?php include(SHARED_PATH . '/member_header.php'); ?>
 
 <div id="content">
   <h1>Register</h1>
@@ -78,4 +78,4 @@ if (is_post_request()) {
   </form>
 </div>
 
-<?php include(SHARED_PATH . '/staff_footer.php'); ?>
+<?php include(SHARED_PATH . '/member_footer.php'); ?>

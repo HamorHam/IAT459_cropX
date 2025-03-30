@@ -8,7 +8,7 @@
   <head>
     <title>CropX - <?php echo h($page_title); ?></title>
     <meta charset="utf-8">
-    <link rel="stylesheet" media="all" href="<?php echo url_for('/stylesheets/staff.css'); ?>" />
+    <link rel="stylesheet" media="all" href="<?php echo url_for('/css/member_style.css'); ?>" />
   </head>
 
   <body>
