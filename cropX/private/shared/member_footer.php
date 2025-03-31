@@ -1,10 +1,5 @@
 <footer>
-  &copy; <?php echo date('Y'); ?> <a href="<?php echo url_for('/index.php?') ?>">CropX</a>
-</footer>
-
+    <p>&copy; <?php echo date('Y'); ?> CropX. All rights reserved.</p>
+  </footer>
 </body>
 </html>
-
-<?php
-  db_disconnect($db);
-?>
