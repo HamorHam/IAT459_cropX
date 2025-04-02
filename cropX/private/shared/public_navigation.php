@@ -9,5 +9,6 @@
         <button type="submit">Search</button>
       </form>
     </li>
+    <li><a href="<?php echo url_for('/filter.php'); ?>">Filter</a></li>
   </ul>
 </nav>
