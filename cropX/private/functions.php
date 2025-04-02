@@ -75,7 +75,7 @@ function display_session_message() {
 
 // TODO: write code to identify the page with this method is password protected
 function is_logged_in() {
-  if(!isset($_SESSION['username'])) {redirect_to(url_for('/staff/login.php'));}
+  if(!isset($_SESSION['username'])) {redirect_to(url_for('/member/login.php'));}
 }
 
 ?>

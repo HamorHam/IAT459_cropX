@@ -5,7 +5,7 @@ $errors = [];
 
 // Redirect if session already exists
 if (isset($_SESSION['username'])) {
-  redirect_to(url_for('/public/index.php'));
+  redirect_to(url_for('/member/index.php'));
 }
 
 // Handle registration
