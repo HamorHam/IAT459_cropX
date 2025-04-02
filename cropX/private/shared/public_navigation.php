@@ -3,6 +3,11 @@
     <li><a href="<?php echo url_for('/index.php'); ?>">Home</a></li>
     <li><a href="<?php echo url_for('/member/login.php'); ?>">Login</a></li>
     <li><a href="<?php echo url_for('/member/register.php'); ?>">Register</a></li>
-    <li><a href="<?php echo url_for('/search.php'); ?>">Search</a></li>
+    <li>
+      <form action="<?php echo url_for('/search.php'); ?>" method="get" style="display: flex; gap: 5px;">
+        <input type="text" name="q" placeholder="Search plants..." required>
+        <button type="submit">Search</button>
+      </form>
+    </li>
   </ul>
 </nav>

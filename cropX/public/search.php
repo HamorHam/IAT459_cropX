@@ -22,11 +22,6 @@ if (!is_blank($search_term)) {
 <div id="content">
   <h1>Search for a Plant</h1>
 
-  <form action="search.php" method="get">
-    <input type="text" name="q" value="<?php echo h($search_term); ?>" placeholder="Enter plant or common name..." required>
-    <input type="submit" value="Search">
-  </form>
-
   <?php if ($search_term != ''): ?>
     <h2>Search Results for "<?php echo h($search_term); ?>"</h2>
 

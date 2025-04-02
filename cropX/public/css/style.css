@@ -39,6 +39,33 @@ body {
   nav a:hover {
     text-decoration: underline;
   }
+
+  nav form {
+    display: flex;
+    align-items: center;
+  }
+  
+  nav input[type="text"] {
+    padding: 0.375rem 0.625rem;         
+    border: 1px solid #a5d6a7;
+    border-radius: 0.375rem;          
+    font-size: 0.9rem;
+  }
+  
+  nav button {
+    padding: 0.375rem 0.75rem;          
+    margin-left: 0.3125rem;            
+    background-color: #6cbf3b;
+    color: white;
+    border: none;
+    border-radius: 0.375rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  nav button:hover {
+    background-color: #5aaa31;
+  }
   
   /* Content Section */
   #content {
