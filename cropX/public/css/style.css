@@ -107,4 +107,29 @@ body {
   #pagination button:hover {
     background-color: #5aaa31;
   }
+
+  /* Search page */
+  #content ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+  }
+  
+  #content li {
+    padding: 10px;
+    margin-bottom: 8px;
+    background: #e9f5e3;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+  }
+  
+  #content li:hover {
+    background: #d6efcc;
+  }
+  
+  #content li a {
+    text-decoration: none;
+    color: #2d3a2d;
+    font-weight: bold;
+  }
   
