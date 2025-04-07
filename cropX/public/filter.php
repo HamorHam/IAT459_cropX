@@ -1,8 +1,12 @@
 <?php
 require_once('../private/initialize.php');
 $page_title = 'Advanced Plant Filter';
-include(SHARED_PATH . '/public_header.php');
-include(SHARED_PATH . '/public_navigation.php');
+
+if (isset($_SESSION['username'])) {
+  include(SHARED_PATH . '/member_header.php');
+} else {
+  include(SHARED_PATH . '/public_header.php');
+}
 
 // Capture user input
 $family     = $_GET['family'] ?? '';

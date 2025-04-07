@@ -1,9 +1,14 @@
 <?php 
 require_once('../private/initialize.php'); 
 $page_title = 'CropX Home';
-include(SHARED_PATH . '/public_header.php'); 
-include(SHARED_PATH . '/public_navigation.php'); 
+
+if (isset($_SESSION['username'])) {
+  include(SHARED_PATH . '/member_header.php');
+} else {
+  include(SHARED_PATH . '/public_header.php');
+}
 ?>
+
 
 <div id="content">
   <h1>Welcome to CropX</h1>

@@ -17,8 +17,12 @@ if (!$plant) {
 }
 
 $page_title = $plant ? h($plant['PlantName']) : 'Plant Not Found';
-include(SHARED_PATH . '/public_header.php');
-include(SHARED_PATH . '/public_navigation.php');
+
+if (isset($_SESSION['username'])) {
+  include(SHARED_PATH . '/member_header.php');
+} else {
+  include(SHARED_PATH . '/public_header.php');
+}
 ?>
 
 <?php

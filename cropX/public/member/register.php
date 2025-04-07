@@ -54,7 +54,7 @@ if (is_post_request()) {
 ?>
 
 <?php $page_title = 'Register'; ?>
-<?php include(SHARED_PATH . '/member_header.php'); ?>
+<?php include(SHARED_PATH . '/public_header.php'); ?>
 
 <div id="content">
   <h1>Register</h1>

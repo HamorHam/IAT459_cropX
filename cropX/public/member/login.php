@@ -38,7 +38,7 @@ if (is_post_request()) {
 ?>
 
 <?php $page_title = 'Login'; ?>
-<?php include(SHARED_PATH . '/member_header.php'); ?>
+<?php include(SHARED_PATH . '/public_header.php'); ?>
 
 <div id="content">
   <h1>Login</h1>
