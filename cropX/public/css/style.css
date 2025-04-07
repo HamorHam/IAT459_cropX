@@ -19,6 +19,33 @@ body {
   font-size: 1rem;
 }
 
+h1, h2, h3{
+  color: var(--mainGreen);
+  font-weight: 600;
+}
+
+h1, h2, h3, h4{
+  margin: .2em 0;
+}
+
+h1{
+  font-size: 32px;
+}
+
+h2{
+  font-size: 24px;
+}
+
+h3{
+  font-size: 18px;
+}
+
+h4{
+  color: var(--accentGreen);
+  font-weight: 500;
+  font-style: italic;
+}
+
 /*Header*/
 header, footer{
   width: 100%;
@@ -29,6 +56,8 @@ header, footer{
 
 header{
   border-bottom: 1px solid var(--accentGreen);
+  position: fixed;
+  top: 0;
 }
 
 footer{
@@ -218,13 +247,9 @@ footer{
 /* Content Section */
 #content {
   max-width: 1200px;
-  margin: 1em auto;
-  padding: 0.5em 1em 0;
-}
-
-#content h1 {
-  color: #467c33;
-  margin-bottom: 1.25rem; /* 20px */
+  margin: 0 auto;
+  padding: calc(68.5px + 1.5em) 1em 0;
+  min-height: calc(100vh - 68.5px - 1.5em - 59px);
 }
 
 #content p {
@@ -232,23 +257,24 @@ footer{
   margin-bottom: 1.875rem; /* 30px */
 }
 
-#content form input[type="text"] {
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  width: 100%;
-  max-width: 25rem; /* 400px */
-  border-radius: 0.375rem; /* 6px */
-  border: 1px solid #ccc;
+#content form input {
+  padding: 0.6em 1.2em 0.45em;
+  border: 1px solid var(--accentGreen);
+  border-radius: 20px;
+  font-size: 16px;
+  color: var(--mainGreen);
+  background: #fff;
 }
 
-#content form input[type="submit"] {
-  background-color: #6cbf3b;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
+#content form button {
+  transition: background-color 0.3s ease;
+  padding: 0.6em 1.2em;
   border: none;
-  font-weight: bold;
+  background: var(--mainGreen);
+  color: #fff;
+  border-radius: 20px;
   cursor: pointer;
+  font-size: 16px
 }
 
 #content form input[type="submit"]:hover {
@@ -300,9 +326,6 @@ footer{
   font-size: 14px;
   line-height: 1;
   margin: 0;
-  color: var(--accentGreen);
-  font-weight: 500;
-  font-style: italic;
 }
 
 #plant-list li a {
