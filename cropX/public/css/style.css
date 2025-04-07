@@ -316,12 +316,15 @@ footer{
 
 /* Pagination Buttons */
 #pagination {
-  margin-top: 1.25rem; /* 20px */
+  margin: .5em 0 3em;
+  display: flex;
+  gap: 4px;
+  justify-content: center;
 }
 
 #pagination button {
   transition: background-color 0.3s ease;
-  padding: 0.6em 1.2em;
+  padding: 0.6em 1em;
   border: none;
   background: var(--mainGreen);
   color: #fff;
@@ -332,6 +335,17 @@ footer{
 
 #pagination button:hover {
   background-color: var(--secondaccent);
+}
+
+#pagination .disabled{
+  opacity: .7;
+}
+
+#pagination #current{
+  opacity: 1;
+  color: white;
+  border: var(--mainGreen) solid 1px;
+  background-color: black;
 }
 
 /* Search page */

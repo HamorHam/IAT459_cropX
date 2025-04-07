@@ -57,17 +57,41 @@ document.addEventListener('DOMContentLoaded', function() {
           plantListDiv.innerHTML = listHtml;
         }
 
-        // build pagination controls
+        // Build pagination controls
         let paginationHtml = '';
-        if (currentPage > 1) {
+        // "First" and "Previous" buttons
+        if (currentPage === 1) {
+          paginationHtml += '<button class="disabled" disabled>First</button> ';
+          paginationHtml += '<button class="disabled" disabled>Previous</button> ';
+        } else {
           paginationHtml += '<button onclick="loadPlants(1)">First</button> ';
           paginationHtml += '<button onclick="loadPlants(' + (currentPage - 1) + ')">Previous</button> ';
         }
-        if (currentPage < totalPages) {
+        // Calculate page number range (display 5 pages including the current page)
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = startPage + 4;
+        if (endPage > totalPages) {
+          endPage = totalPages;
+          startPage = Math.max(1, endPage - 4);
+        }
+        // Display page number buttons
+        for (let i = startPage; i <= endPage; i++) {
+          if (i === currentPage) {
+            paginationHtml += '<button id="current" class="disabled" disabled>' + i + '</button> ';
+          } else {
+            paginationHtml += '<button onclick="loadPlants(' + i + ')">' + i + '</button> ';
+          }
+        }
+        // "Next" and "Last" buttons
+        if (currentPage === totalPages) {
+          paginationHtml += '<button class="disabled" disabled>Next</button> ';
+          paginationHtml += '<button class="disabled" disabled>Last</button>';
+        } else {
           paginationHtml += '<button onclick="loadPlants(' + (currentPage + 1) + ')">Next</button> ';
           paginationHtml += '<button onclick="loadPlants(' + totalPages + ')">Last</button>';
         }
         paginationDiv.innerHTML = paginationHtml;
+
       })
       .catch(error => {
         plantListDiv.innerHTML = '<p>Error loading plants.</p>';
