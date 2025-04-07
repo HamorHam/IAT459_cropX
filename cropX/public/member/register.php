@@ -56,25 +56,25 @@ if (is_post_request()) {
 <?php $page_title = 'Register'; ?>
 <?php include(SHARED_PATH . '/public_header.php'); ?>
 
-<div id="content">
+<div id="content" style="display:flex;align-items:center;justify-content:center;flex-direction:column">
   <h1>Register</h1>
 
   <?php echo display_errors($errors); ?>
 
-  <form action="register.php" method="post">
+  <form action="register.php" method="post" style="margin-bottom:6em;display:flex;flex-direction:column;gap:6px;width:100%;max-width:400px">
     <label for="email">Email:</label>
-    <input type="text" name="email" required /><br />
+    <input type="text" name="email" required />
     <label for="username">Username:</label>
-    <input type="text" name="username" required /><br />
+    <input type="text" name="username" required />
     <label for="password">Password:</label>
-    <input type="password" name="password" required /><br />
+    <input type="password" name="password" required />
     <label for="password_confirm">Confirm Password:</label>
-    <input type="password" name="password_confirm" required /><br />
+    <input type="password" name="password_confirm" required />
     <label for="latitude">Latitude:</label>
-    <input type="text" name="latitude" required /><br />
+    <input type="text" name="latitude" required />
     <label for="longitude">Longitude:</label>
-    <input type="text" name="longitude" required /><br />
-    <input type="submit" value="Register" />
+    <input style="margin-bottom:.5em" type="text" name="longitude" required />
+    <button type="submit" value="Register">Register</button>
   </form>
 </div>
 

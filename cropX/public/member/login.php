@@ -40,18 +40,18 @@ if (is_post_request()) {
 <?php $page_title = 'Login'; ?>
 <?php include(SHARED_PATH . '/public_header.php'); ?>
 
-<div id="content">
+<div id="content" style="display:flex;align-items:center;justify-content:center;flex-direction:column">
   <h1>Login</h1>
-
   <?php echo display_errors($errors); ?>
 
-  <form action="login.php" method="post">
+  <form action="login.php" method="post" style="margin-bottom:6em;display:flex;flex-direction:column;gap:6px;width:100%;max-width:400px">
     <label for="username">Username:</label>
-    <input type="text" name="username" value="" required /><br />
+    <input type="text" name="username" value="" required />
     <label for="password">Password:</label>
-    <input type="password" name="password" value="" required /><br />
-    <input type="submit" value="Login" />
+    <input style="margin-bottom:.5em" type="password" name="password" value="" required />
+    <button type="submit" value="Login">Login</button>
   </form>
+
 </div>
 
 <?php include(SHARED_PATH . '/member_footer.php'); ?>
