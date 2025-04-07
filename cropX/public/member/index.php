@@ -21,15 +21,18 @@ if (is_post_request()) {
 
   // Process account deletion
   if (isset($_POST['delete_account'])) {
+    // Remove user from `user` table
     $delete_query = "DELETE FROM user WHERE UserID = " . intval($user_id);
+    
     if (mysqli_query($db, $delete_query)) {
-      // Log out and redirect to home page
-      session_destroy();
-      redirect_to(url_for('/index.php'));
+        // The foreign key on comments must be ON DELETE SET NULL
+        // so the comment still exists but UserID becomes NULL
+        session_destroy();
+        redirect_to(url_for('/index.php'));
     } else {
-      $errors[] = "Failed to delete account: " . mysqli_error($db);
+        $errors[] = "Failed to delete account: " . mysqli_error($db);
     }
-  }
+}
 
   // Process profile update
   if (isset($_POST['update_info'])) {
