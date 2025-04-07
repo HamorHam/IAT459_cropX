@@ -304,6 +304,8 @@ footer{
 
 #plant-list li img{
   width: 100%;
+  height: calc((1200px - 18px)/ 4);
+  object-fit: cover;
 }
 
 #plant-list li .info{

@@ -45,9 +45,9 @@ document.addEventListener('DOMContentLoaded', function() {
           let listHtml = '<ul>';
           plants.forEach(plant => {
             listHtml += '<li><a href="<?php echo url_for('/plant.php'); ?>?plant=' + encodeURIComponent(plant.PlantName) + '">';
-            // If plant image exists (non-empty), use it; otherwise use default image.
+            // If plant image exists (non-empty), use it... otherwise use default image.
             if (plant.Image && plant.Image.trim() !== "") {
-              listHtml += '<img src="<?php echo url_for('/img/'); ?>' + plant.Image + '" alt="' + plant.PlantName + '"> ';
+              listHtml += '<img src="' + plant.Image + '" alt="' + plant.PlantName + '"> ';
             } else {
               listHtml += '<img src="<?php echo url_for('/img/default.jpeg'); ?>" alt="' + plant.PlantName + '"> ';
             }
