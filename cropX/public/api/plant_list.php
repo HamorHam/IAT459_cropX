@@ -5,9 +5,9 @@ header('Content-Type: application/json');
 
 // retrieve page and limit parameters
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 12;
 if ($page < 1) { $page = 1; }
-if ($limit < 1) { $limit = 10; }
+if ($limit < 1) { $limit = 12; }
 $offset = ($page - 1) * $limit;
 
 // get total count of plants for pagination

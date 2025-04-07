@@ -11,8 +11,6 @@ if (isset($_SESSION['username'])) {
 
 
 <div id="content">
-  <h1>Welcome to CropX</h1>
-  <p>This is the crop wiki, where you can browse information about various crops.</p>
   
   <div id="plant-list">
     <p>Loading plants...</p>
@@ -27,7 +25,7 @@ if (isset($_SESSION['username'])) {
 // js to load plants with pagination controls
 document.addEventListener('DOMContentLoaded', function() {
   let currentPage = 1;
-  const pageSize = 10;
+  const pageSize = 12;
   const plantListDiv = document.getElementById('plant-list');
   const paginationDiv = document.getElementById('pagination');
 
@@ -46,9 +44,14 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
           let listHtml = '<ul>';
           plants.forEach(plant => {
-            listHtml += '<li><a href="<?php echo url_for('/plant.php'); ?>?plant=' + 
-                        encodeURIComponent(plant.PlantName) + '">' + 
-                        plant.PlantName + ' (' + plant.Family + ')</a></li>';
+            listHtml += '<li><a href="<?php echo url_for('/plant.php'); ?>?plant=' + encodeURIComponent(plant.PlantName) + '">';
+            // If plant image exists (non-empty), use it; otherwise use default image.
+            if (plant.Image && plant.Image.trim() !== "") {
+              listHtml += '<img src="<?php echo url_for('/img/'); ?>' + plant.Image + '" alt="' + plant.PlantName + '"> ';
+            } else {
+              listHtml += '<img src="<?php echo url_for('/img/default.jpeg'); ?>" alt="' + plant.PlantName + '"> ';
+            }
+            listHtml += '<div class="info"><h3>' + plant.PlantName + '</h3><h4>' + plant.Family + '</h4></div></a></li>';
           });
           listHtml += '</ul>';
           plantListDiv.innerHTML = listHtml;
