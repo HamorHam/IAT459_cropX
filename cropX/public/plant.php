@@ -64,7 +64,7 @@ if (is_post_request() && isset($_POST['content'])) {
     <p><?php echo h($error_message); ?></p>
   <?php else: ?>
     <h1><?php echo h($plant['PlantName']); ?></h1>
-    
+
     <h2>General Information</h2>
     <table border="1" cellspacing="0" cellpadding="5">
       <tr>
@@ -316,7 +316,7 @@ if (is_post_request() && isset($_POST['content'])) {
         <td><?php echo h($plant['CropCycle_Max']); ?></td>
       </tr>
     </table>
-    
+
     <h2>Uses</h2>
     <?php
     // Retrieve uses details for this plant
@@ -325,7 +325,7 @@ if (is_post_request() && isset($_POST['content'])) {
                    ORDER BY UseID";
     $uses_result = mysqli_query($db, $uses_query);
     if (mysqli_num_rows($uses_result) > 0):
-    ?>
+      ?>
       <table border="1" cellspacing="0" cellpadding="5">
         <tr>
           <th>Use ID</th>
@@ -345,7 +345,7 @@ if (is_post_request() && isset($_POST['content'])) {
     <?php else: ?>
       <p>No uses available for this plant.</p>
     <?php endif; ?>
-    
+
     <h2>Specific Cultivation Details</h2>
     <?php
     // Retrieve cultivation details for this plant
@@ -364,10 +364,12 @@ if (is_post_request() && isset($_POST['content'])) {
             <th>Cultivation ID</th>
           <?php endif; ?>
           <?php
-            foreach ($firstCultivation as $field => $value) {
-              if ($field == 'PlantName' || $field == 'CultivationID') { continue; }
-              echo "<th>" . h($field) . "</th>";
+          foreach ($firstCultivation as $field => $value) {
+            if ($field == 'PlantName' || $field == 'CultivationID') {
+              continue;
             }
+            echo "<th>" . h($field) . "</th>";
+          }
           ?>
         </tr>
         <tr>
@@ -375,10 +377,12 @@ if (is_post_request() && isset($_POST['content'])) {
             <td><?php echo h($firstCultivation['CultivationID']); ?></td>
           <?php endif; ?>
           <?php
-            foreach ($firstCultivation as $field => $value) {
-              if ($field == 'PlantName' || $field == 'CultivationID') { continue; }
-              echo "<td>" . h($value) . "</td>";
+          foreach ($firstCultivation as $field => $value) {
+            if ($field == 'PlantName' || $field == 'CultivationID') {
+              continue;
             }
+            echo "<td>" . h($value) . "</td>";
+          }
           ?>
         </tr>
         <?php while ($cultivation = mysqli_fetch_assoc($cultivation_result)): ?>
@@ -387,10 +391,12 @@ if (is_post_request() && isset($_POST['content'])) {
               <td><?php echo h($cultivation['CultivationID']); ?></td>
             <?php endif; ?>
             <?php
-              foreach ($cultivation as $field => $value) {
-                if ($field == 'PlantName' || $field == 'CultivationID') { continue; }
-                echo "<td>" . h($value) . "</td>";
+            foreach ($cultivation as $field => $value) {
+              if ($field == 'PlantName' || $field == 'CultivationID') {
+                continue;
               }
+              echo "<td>" . h($value) . "</td>";
+            }
             ?>
           </tr>
         <?php endwhile; ?>
@@ -398,7 +404,7 @@ if (is_post_request() && isset($_POST['content'])) {
     <?php else: ?>
       <p>No cultivation details available for this plant.</p>
     <?php endif; ?>
-    
+
     <h2>Comments</h2>
     <?php
     // Retrieve approved comments for this plant
@@ -409,11 +415,12 @@ if (is_post_request() && isset($_POST['content'])) {
                        ORDER BY c.CommentDate ASC";
     $comments_result = mysqli_query($db, $comments_query);
     if (mysqli_num_rows($comments_result) > 0):
-    ?>
+      ?>
       <ul>
         <?php while ($comment = mysqli_fetch_assoc($comments_result)): ?>
           <li>
-            <p><strong><?php echo h($comment['UserName'] ?? 'Anonymous'); ?></strong> on <?php echo h($comment['CommentDate']); ?></p>
+            <p><strong><?php echo h($comment['UserName'] ?? 'Anonymous'); ?></strong> on
+              <?php echo h($comment['CommentDate']); ?></p>
             <p><?php echo nl2br(h($comment['Content'])); ?></p>
           </li>
         <?php endwhile; ?>
@@ -421,11 +428,11 @@ if (is_post_request() && isset($_POST['content'])) {
     <?php else: ?>
       <p>No comments yet. Be the first to comment!</p>
     <?php endif; ?>
-    
+
     <h2>Add a Comment</h2>
     <?php if (isset($_SESSION['username'])): ?>
-      <?php if (!empty($comment_message)) echo "<p>" . h($comment_message) . "</p>"; ?>
-      <form action="" method="post">
+      <div id="comment-response" style="color: green;"></div>
+      <form id="comment-form">
         <input type="hidden" name="plant_name" value="<?php echo h($plant_name); ?>" />
         <label for="content">Comment:</label><br />
         <textarea name="content" required rows="5" cols="50"></textarea><br />
@@ -434,9 +441,39 @@ if (is_post_request() && isset($_POST['content'])) {
     <?php else: ?>
       <p>Please <a href="<?php echo url_for('/member/login.php'); ?>">login</a> to add a comment.</p>
     <?php endif; ?>
-
-    
   <?php endif; ?>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("comment-form");
+  const responseDiv = document.getElementById("comment-response");
+
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      fetch("<?php echo url_for('/submit_comment.php'); ?>", {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        responseDiv.style.color = data.status === "success" ? "green" : "red";
+        responseDiv.textContent = data.message;
+        if (data.status === "success") {
+          form.reset();
+        }
+      })
+      .catch(() => {
+        responseDiv.style.color = "red";
+        responseDiv.textContent = "Something went wrong. Please try again.";
+      });
+    });
+  }
+});
+</script>
 
 <?php include(SHARED_PATH . '/public_footer.php'); ?>
