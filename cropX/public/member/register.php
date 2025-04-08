@@ -22,11 +22,20 @@ if (is_post_request()) {
   if ($password === $password_confirm) {
 
     //  Check if username already exists
-    $existing_query = "SELECT COUNT(*) AS count FROM user WHERE Name = '" . mysqli_real_escape_string($db, $name) . "'";
-    $existing_res = mysqli_query($db, $existing_query);
+    $username_query = "SELECT COUNT(*) AS count FROM user WHERE Name = '" . mysqli_real_escape_string($db, $name) . "'";
+    $username_res = mysqli_query($db, $username_query);
+    $username_count = mysqli_fetch_assoc($username_res)['count'];
 
-    if (mysqli_fetch_assoc($existing_res)['count'] != 0) {
-      $errors[] = 'The username already exists in the database, please try another username.';
+    //  Check if email already exists
+    $email_query = "SELECT COUNT(*) AS count FROM user WHERE Email = '" . mysqli_real_escape_string($db, $email) . "'";
+    $email_res = mysqli_query($db, $email_query);
+    $email_count = mysqli_fetch_assoc($email_res)['count'];
+
+    if ($username_count != 0) {
+      $errors[] = 'The username already exists. Please try another.';
+    } elseif ($email_count != 0) {
+      $errors[] = 'This email is already registered. Please use another email.';
+
     } else {
       //  Hash password and insert user
       $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -61,7 +70,8 @@ if (is_post_request()) {
 
   <?php echo display_errors($errors); ?>
 
-  <form action="register.php" method="post" style="margin-bottom:6em;display:flex;flex-direction:column;gap:6px;width:100%;max-width:400px">
+  <form action="register.php" method="post"
+    style="margin-bottom:6em;display:flex;flex-direction:column;gap:6px;width:100%;max-width:400px">
     <label for="email">Email:</label>
     <input type="text" name="email" required />
     <label for="username">Username:</label>
