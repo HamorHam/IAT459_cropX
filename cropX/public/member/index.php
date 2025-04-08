@@ -116,7 +116,7 @@ include(SHARED_PATH . '/member_header.php');
   
   <h3 style="margin-top:2em">Delete Your Account</h3>
   <form style="margin-bottom:3em" action="index.php" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
-    <button type="submit" name="delete_account">Delete Account</button>
+    <button type="submit" style="background-color:#d81600" name="delete_account">Delete Account</button>
   </form>
 
   <h3 style="margin-top:2em">My Comments</h3>

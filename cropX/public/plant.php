@@ -288,9 +288,11 @@ if (is_post_request() && isset($_POST['content'])) {
                         height: <?php echo latToPosition($optMax) - latToPosition($optMin); ?>%;">
               </div>
             <?php endif; ?>
-            <div class="user-latitude" 
-              style="top: <?php echo latToPosition($user['Latitude']); ?>%;">
-            </div>
+            <?php if (isset($_SESSION['username'])): ?>
+              <div class="user-latitude" 
+                  style="top: <?php echo latToPosition($user['Latitude']); ?>%;">
+              </div>
+            <?php endif; ?>
           </div>
           <table>
             <?php if ($show_opt): ?>
@@ -305,7 +307,7 @@ if (is_post_request() && isset($_POST['content'])) {
                 <td class="rightAlign"><?php echo h($absMin); ?> - <?php echo h($absMax); ?>°</td>
               </tr>
             <?php endif; ?>
-            <?php if ($user['Latitude']): ?>
+            <?php if ($user['Latitude'] && isset($_SESSION['username'])): ?>
               <tr>
                 <th>Your Latitude</th>
                 <td class="rightAlign"><?php echo $user['Latitude']; ?>°</td>
