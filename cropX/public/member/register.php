@@ -41,8 +41,8 @@ if (is_post_request()) {
       )";
 
       if (mysqli_query($db, $insert_user_query)) {
-        $_SESSION['username'] = $name;
-        redirect_to(url_for('/member/index.php'));
+        // Redirect to login page after successful registration
+        redirect_to(url_for('/member/login.php?registered=1'));
       } else {
         $errors[] = 'Registration failed: ' . mysqli_error($db);
       }

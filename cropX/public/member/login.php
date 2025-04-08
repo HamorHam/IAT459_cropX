@@ -42,9 +42,17 @@ if (is_post_request()) {
 
 <div id="content" style="display:flex;align-items:center;justify-content:center;flex-direction:column">
   <h1>Login</h1>
+
+  <?php if (isset($_GET['registered'])): ?>
+    <p style="color: green; font-weight: bold; margin-bottom: 1rem;">
+      Registration successful. Please log in.
+    </p>
+  <?php endif; ?>
+
   <?php echo display_errors($errors); ?>
 
-  <form action="login.php" method="post" style="margin-bottom:6em;display:flex;flex-direction:column;gap:6px;width:100%;max-width:400px">
+  <form action="login.php" method="post"
+    style="margin-bottom:6em;display:flex;flex-direction:column;gap:6px;width:100%;max-width:400px">
     <label for="username">Username:</label>
     <input type="text" name="username" value="" required />
     <label for="password">Password:</label>
