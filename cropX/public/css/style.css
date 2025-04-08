@@ -397,7 +397,7 @@ footer{
   width: 100%;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: repeat(3, fit-content);
+  grid-template-rows: repeat(5, fit-content);
   margin-top: 1em;
   gap: 6px;
 }
@@ -477,11 +477,6 @@ footer{
   text-align: right;
 }
 
-
-
-
-
-
 .map-wrapper {
   position: relative;
   width: 100%;
@@ -498,10 +493,75 @@ footer{
   position: absolute;
   left: 0;
   right: 0;
-  background: rgba(0, 150, 0, 0.25); /* greenish fill */
+  background: rgba(0, 150, 0, 0.25);
   pointer-events: none;
 }
 .opt-range {
-  background: var(--mainGreen); /* darker green for optimal */
-  z-index: 1; /* Ensure optimal range is on top */
+  background: var(--mainGreen);
+  z-index: 1;
+}
+
+.user-latitude {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: red;
+  z-index: 2;
+}
+
+
+/*Comments section*/
+.comment-list {
+  list-style: none;
+  padding: 0;
+}
+
+.comment-list li {
+  border-radius: 6px;
+  padding: 1em!important;
+  margin-bottom: 6px;
+  background: var(--mainGreen)!important;
+}
+
+.comment-meta {
+  font-size: 14px;
+  color: var(--background);
+  margin-bottom: 0.5rem;
+}
+
+.comment-meta span{
+  opacity: .8;
+}
+
+.comment-meta i{
+  opacity: .6;
+}
+
+.comment-content {
+  color: white;
+  font-size: 16px;
+}
+
+#comment-form{
+  width: 100%;
+}
+
+#comment-form textarea {
+  width: 100%;
+  max-width: calc(100% - 6px);
+  min-width: calc(100% - 6px);
+  height: 100px;
+  border: 1px solid var(--mainGreen);
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+#comment-form button{
+  margin-bottom: 3em;
+}
+
+#comment-response {
+  margin-top: 0.5rem;
+  font-weight: 500;
 }

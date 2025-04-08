@@ -7,7 +7,7 @@ if (empty($plant_name)) {
   redirect_to(url_for('/index.php'));
 }
 
-// Retrieve plant details
+// get plant details
 $plant_query = "SELECT * FROM plant WHERE PlantName = '" . mysqli_real_escape_string($db, $plant_name) . "' LIMIT 1";
 $plant_result = mysqli_query($db, $plant_query);
 $plant = mysqli_fetch_assoc($plant_result);
@@ -23,7 +23,17 @@ if (isset($_SESSION['username'])) {
 } else {
   include(SHARED_PATH . '/public_header.php');
 }
+
+//get users
+$user_id = $_SESSION['user_id'];
+$query = "SELECT * FROM user WHERE UserID = ?";
+$stmt = $db->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
 ?>
+
 
 <?php
 // Process comment submission on the same page
@@ -270,6 +280,9 @@ if (is_post_request() && isset($_POST['content'])) {
                         height: <?php echo ($optMax - $optMin) * 50 / 90; ?>%;">
               </div>
             <?php endif; ?>
+            <div class="user-latitude" 
+              style="top: <?php echo 50 - ($user['Latitude'] * 50/90); ?>%;">
+            </div>
           </div>
           <table>
             <?php if ($show_opt): ?>
@@ -282,6 +295,12 @@ if (is_post_request() && isset($_POST['content'])) {
               <tr>
                 <th>Absolute</th>
                 <td class="rightAlign"><?php echo h($absMin); ?> - <?php echo h($absMax); ?>°</td>
+              </tr>
+            <?php endif; ?>
+            <?php if ($user['Latitude']): ?>
+              <tr>
+                <th>Your Latitude</th>
+                <td class="rightAlign"><?php echo $user['Latitude']; ?>°</td>
               </tr>
             <?php endif; ?>
           </table>
@@ -596,12 +615,16 @@ if (is_post_request() && isset($_POST['content'])) {
     $comments_result = mysqli_query($db, $comments_query);
     if (mysqli_num_rows($comments_result) > 0):
       ?>
-      <ul>
+      <ul class="comment-list">
         <?php while ($comment = mysqli_fetch_assoc($comments_result)): ?>
           <li>
-            <p><strong><?php echo h($comment['UserName'] ?? 'Anonymous'); ?></strong> on
-              <?php echo h($comment['CommentDate']); ?></p>
-            <p><?php echo nl2br(h($comment['Content'])); ?></p>
+            <div class="comment-meta">
+              <span><?php echo h($comment['UserName'] ?? 'Anonymous'); ?></span>
+              <i> • <?php echo date("F j, Y", strtotime($comment['CommentDate'])); ?></i>
+            </div>
+            <div class="comment-content">
+              <?php echo nl2br(h($comment['Content'])); ?>
+            </div>
           </li>
         <?php endwhile; ?>
       </ul>
@@ -609,14 +632,13 @@ if (is_post_request() && isset($_POST['content'])) {
       <p>No comments yet. Be the first to comment!</p>
     <?php endif; ?>
 
-    <h2>Add a Comment</h2>
+    <h3>Add a Comment</h3>
     <?php if (isset($_SESSION['username'])): ?>
-      <div id="comment-response" style="color: green;"></div>
+      <div id="comment-response" style="color: var(--mainGreen)"></div>
       <form id="comment-form">
         <input type="hidden" name="plant_name" value="<?php echo h($plant_name); ?>" />
-        <label for="content">Comment:</label><br />
-        <textarea name="content" required rows="5" cols="50"></textarea><br />
-        <input type="submit" value="Submit Comment" />
+        <textarea name="content" required></textarea><br />
+        <button type="submit" value="Submit Comment">Submit Comment</button>
       </form>
     <?php else: ?>
       <p>Please <a href="<?php echo url_for('/member/login.php'); ?>">login</a> to add a comment.</p>
