@@ -7,7 +7,7 @@ if (empty($plant_name)) {
   redirect_to(url_for('/index.php'));
 }
 
-// Retrieve plant details
+// get plant details
 $plant_query = "SELECT * FROM plant WHERE PlantName = '" . mysqli_real_escape_string($db, $plant_name) . "' LIMIT 1";
 $plant_result = mysqli_query($db, $plant_query);
 $plant = mysqli_fetch_assoc($plant_result);
@@ -23,7 +23,17 @@ if (isset($_SESSION['username'])) {
 } else {
   include(SHARED_PATH . '/public_header.php');
 }
+
+//get users
+$user_id = $_SESSION['user_id'];
+$query = "SELECT * FROM user WHERE UserID = ?";
+$stmt = $db->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
 ?>
+
 
 <?php
 // Process comment submission on the same page
@@ -100,335 +110,503 @@ if (is_post_request() && isset($_POST['content'])) {
         <img class="imgCard" style="grid-column:span 2" src="<?php echo url_for('/img/default.jpeg'); ?>"
           alt="Default Image">
       <?php endif; ?>
+
+      <div class="card" style="grid-column:span 2">
+        <h3>Temperature</h3>
+        <?php
+        $absMin = $plant['TempRequiredAbsoluteMin'];
+        $optMin = $plant['TempRequiredOptimalMin'];
+        $optMax = $plant['TempRequiredOptimalMax'];
+        $absMax = $plant['TempRequiredAbsoluteMax'];
+
+        if (
+          is_numeric($absMin) && is_numeric($optMin) &&
+          is_numeric($optMax) && is_numeric($absMax) &&
+          ($absMax - $absMin) > 0
+        ) {
+          $absMin = ($absMin == intval($absMin)) ? intval($absMin) : $absMin;
+          $optMin = ($optMin == intval($optMin)) ? intval($optMin) : $optMin;
+          $optMax = ($optMax == intval($optMax)) ? intval($optMax) : $optMax;
+          $absMax = ($absMax == intval($absMax)) ? intval($absMax) : $absMax;
+
+          $range = $absMax - $absMin;
+          $leftOpt = (($optMin - $absMin) / $range) * 100;
+          $optWidth = (($optMax - $optMin) / $range) * 100;
+          ?>
+          <div class="mainBar">
+            <div class="optimal-range" style="left: <?php echo $leftOpt; ?>%; width: <?php echo $optWidth; ?>%"></div>
+          </div>
+          <div class="rangeLabels">
+            <span><?php echo h($absMin); ?>°C</span>
+            <span><?php echo h($optMin); ?>°C</span>
+            <span><?php echo h($optMax); ?>°C</span>
+            <span><?php echo h($absMax); ?>°C</span>
+          </div>
+          <table>
+            <tr>
+              <th>Optimal</th>
+              <td class="rightAlign"><?php echo h($optMin); ?> - <?php echo h($optMax); ?>°C</td>
+            </tr>
+            <tr>
+              <th>Absolute</th>
+              <td class="rightAlign"><?php echo h($absMin); ?> - <?php echo h($absMax); ?>°C</td>
+            </tr>
+          </table>
+        <?php } else { ?>
+          <p>No temperature information available for this plant.</p>
+        <?php } ?>
+      </div>
+
+      <div class="card" style="grid-column:span 2">
+        <h3>Rainfall</h3>
+        <?php
+        $absMin = $plant['RainfallAnnualAbsoluteMin'];
+        $optMin = $plant['RainfallAnnualOptimalMin'];
+        $optMax = $plant['RainfallAnnualOptimalMax'];
+        $absMax = $plant['RainfallAnnualAbsoluteMax'];
+
+        if (
+          is_numeric($absMin) && is_numeric($optMin) &&
+          is_numeric($optMax) && is_numeric($absMax) &&
+          ($absMax - $absMin) > 0
+        ) {
+          $absMin = ($absMin == intval($absMin)) ? intval($absMin) : $absMin;
+          $optMin = ($optMin == intval($optMin)) ? intval($optMin) : $optMin;
+          $optMax = ($optMax == intval($optMax)) ? intval($optMax) : $optMax;
+          $absMax = ($absMax == intval($absMax)) ? intval($absMax) : $absMax;
+
+          $range = $absMax - $absMin;
+          $leftOpt = (($optMin - $absMin) / $range) * 100;
+          $optWidth = (($optMax - $optMin) / $range) * 100;
+          ?>
+          <div class="mainBar">
+            <div class="optimal-range" style="left: <?php echo $leftOpt; ?>%; width: <?php echo $optWidth; ?>%"></div>
+          </div>
+          <div class="rangeLabels">
+            <span><?php echo h($absMin); ?> mm</span>
+            <span><?php echo h($optMin); ?> mm</span>
+            <span><?php echo h($optMax); ?> mm</span>
+            <span><?php echo h($absMax); ?> mm</span>
+          </div>
+          <table>
+            <tr>
+              <th>Optimal</th>
+              <td class="rightAlign"><?php echo h($optMin); ?> - <?php echo h($optMax); ?> mm</td>
+            </tr>
+            <tr>
+              <th>Absolute</th>
+              <td class="rightAlign"><?php echo h($absMin); ?> - <?php echo h($absMax); ?> mm</td>
+            </tr>
+          </table>
+        <?php } else { ?>
+          <p>No rainfall information available for this plant.</p>
+        <?php } ?>
+      </div>
+
+      <div class="card" style="grid-column:span 2">
+        <h3>Light Intensity</h3>
+        <?php
+        $absMin = $plant['LightIntensityAbsoluteMin'];
+        $optMin = $plant['LightIntensityOptimalMin'];
+        $optMax = $plant['LightIntensityOptimalMax'];
+        $absMax = $plant['LightIntensityAbsoluteMax'];
+
+        if (
+          is_numeric($absMin) && is_numeric($optMin) &&
+          is_numeric($optMax) && is_numeric($absMax) &&
+          ($absMax - $absMin) > 0
+        ) {
+          $absMin = ($absMin == intval($absMin)) ? intval($absMin) : $absMin;
+          $optMin = ($optMin == intval($optMin)) ? intval($optMin) : $optMin;
+          $optMax = ($optMax == intval($optMax)) ? intval($optMax) : $optMax;
+          $absMax = ($absMax == intval($absMax)) ? intval($absMax) : $absMax;
+
+          $range = $absMax - $absMin;
+          $leftOpt = (($optMin - $absMin) / $range) * 100;
+          $optWidth = (($optMax - $optMin) / $range) * 100;
+          ?>
+          <div class="mainBar">
+            <div class="optimal-range" 
+                style="left: <?php echo $leftOpt; ?>%; width: <?php echo $optWidth; ?>%">
+            </div>
+          </div>
+          <div class="rangeLabels">
+            <span><?php echo h($absMin); ?> µmol/m²/s</span>
+            <span><?php echo h($optMin); ?> µmol/m²/s</span>
+            <span><?php echo h($optMax); ?> µmol/m²/s</span>
+            <span><?php echo h($absMax); ?> µmol/m²/s</span>
+          </div>
+          <table>
+            <tr>
+              <th>Optimal</th>
+              <td class="rightAlign"><?php echo h($optMin); ?> - <?php echo h($optMax); ?> µmol/m²/s</td>
+            </tr>
+            <tr>
+              <th>Absolute</th>
+              <td class="rightAlign"><?php echo h($absMin); ?> - <?php echo h($absMax); ?> µmol/m²/s</td>
+            </tr>
+          </table>
+        <?php
+        } else {
+          echo "<p>No light intensity information available for this plant.</p>";
+        }
+        ?>
+      </div>
+
+      <div class="card" style="grid-column:span 2">
+        <h3>Latitude</h3>
+        <?php
+          $absMin = $plant['LatitudeAbsoluteMin'];
+          $absMax = $plant['LatitudeAbsoluteMax'];
+          $optMin = $plant['LatitudeOptimalMin'];
+          $optMax = $plant['LatitudeOptimalMax'];
+
+          $has_any_data = is_numeric($absMin) && is_numeric($absMax) && is_numeric($optMin) && is_numeric($optMax);
+
+          $show_abs = ($absMin != 0 || $absMax != 0);
+          $show_opt = ($optMin != 0 || $optMax != 0);
+        ?>
+
+        <?php if ($has_any_data && ($show_abs || $show_opt)): ?>
+          <div class="map-wrapper">
+            <img src="/IAT459_CROPX/cropX/public/img/lat-map.png" alt="World Map" class="map-image" />
+            <?php if ($show_abs): ?>
+              <div class="lat-band abs-range" 
+                  style="top: <?php echo 50 - ($absMax * 50 / 90); ?>%; 
+                        height: <?php echo ($absMax - $absMin) * 50 / 90; ?>%;">
+              </div>
+            <?php endif; ?>
+            <?php if ($show_opt): ?>
+              <div class="lat-band opt-range" 
+                  style="top: <?php echo 50 - ($optMax * 50 / 90); ?>%; 
+                        height: <?php echo ($optMax - $optMin) * 50 / 90; ?>%;">
+              </div>
+            <?php endif; ?>
+            <div class="user-latitude" 
+              style="top: <?php echo 50 - ($user['Latitude'] * 50/90); ?>%;">
+            </div>
+          </div>
+          <table>
+            <?php if ($show_opt): ?>
+              <tr>
+                <th>Optimal</th>
+                <td class="rightAlign"><?php echo h($optMin); ?> - <?php echo h($optMax); ?>°</td>
+              </tr>
+            <?php endif; ?>
+            <?php if ($show_abs): ?>
+              <tr>
+                <th>Absolute</th>
+                <td class="rightAlign"><?php echo h($absMin); ?> - <?php echo h($absMax); ?>°</td>
+              </tr>
+            <?php endif; ?>
+            <?php if ($user['Latitude']): ?>
+              <tr>
+                <th>Your Latitude</th>
+                <td class="rightAlign"><?php echo $user['Latitude']; ?>°</td>
+              </tr>
+            <?php endif; ?>
+          </table>
+        <?php else: ?>
+          <p>No latitude information available for this plant.</p>
+        <?php endif; ?>
+      </div>
+
+      <div class="card" style="grid-column:span 2">
+        <h3>Environmental Conditions</h3>
+        <hr class="line"/>
+        <table>
+          <?php if ($plant['KillingTemp_DuringRest'] !== null): ?>
+            <tr>
+              <th>Killing Temp (During Rest)</th>
+              <td><?php echo h($plant['KillingTemp_DuringRest']); ?> °C</td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['KillingTemp_EarlyGrowth'] !== null): ?>
+            <tr>
+              <th>Killing Temp (Early Growth)</th>
+              <td><?php echo h($plant['KillingTemp_EarlyGrowth']); ?> °C</td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['Photoperiod']): ?>
+            <tr>
+              <th>Photoperiod</th>
+              <td><?php echo h($plant['Photoperiod']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['ClimateZone']): ?>
+            <tr>
+              <th>Climate Zone</th>
+              <td><?php echo h($plant['ClimateZone']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['AltitudeAbsoluteMin'] !== null && $plant['AltitudeAbsoluteMax'] !== null): ?>
+            <tr>
+              <th>Altitude (Absolute)</th>
+              <td><?php echo h($plant['AltitudeAbsoluteMin']); ?> - <?php echo h($plant['AltitudeAbsoluteMax']); ?> m</td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['SoilAlToxOptimal']): ?>
+            <tr>
+              <th>Soil Al Toxicity (Optimal)</th>
+              <td><?php echo h($plant['SoilAlToxOptimal']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['SoilAlToxAbsolute']): ?>
+            <tr>
+              <th>Soil Al Toxicity (Absolute)</th>
+              <td><?php echo h($plant['SoilAlToxAbsolute']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['AbioticTolerance']): ?>
+            <tr>
+              <th>Abiotic Tolerance</th>
+              <td><?php echo h($plant['AbioticTolerance']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['AbioticSuscept']): ?>
+            <tr>
+              <th>Abiotic Susceptibility</th>
+              <td><?php echo h($plant['AbioticSuscept']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['IntroductionRisks']): ?>
+            <tr>
+              <th>Introduction Risks</th>
+              <td><?php echo h($plant['IntroductionRisks']); ?></td>
+            </tr>
+          <?php endif; ?>
+        </table>
+      </div>
+
+      <div class="card" style="grid-column:span 2">
+        <h3>Soil Properties</h3>
+        <hr class="line"/>
+        <table>
+          <?php if ($plant['SoilPHOptimalMin'] !== null && $plant['SoilPHOptimalMax'] !== null): ?>
+            <tr>
+              <th>Soil pH (Optimal)</th>
+              <td><?php echo h($plant['SoilPHOptimalMin']); ?> - <?php echo h($plant['SoilPHOptimalMax']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['SoilPHAbsoluteMin'] !== null && $plant['SoilPHAbsoluteMax'] !== null): ?>
+            <tr>
+              <th>Soil pH (Absolute)</th>
+              <td><?php echo h($plant['SoilPHAbsoluteMin']); ?> - <?php echo h($plant['SoilPHAbsoluteMax']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['SoilDepthOptimal']): ?>
+            <tr>
+              <th>Soil Depth (Optimal)</th>
+              <td><?php echo h($plant['SoilDepthOptimal']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['SoilDepthAbsolute']): ?>
+            <tr>
+              <th>Soil Depth (Absolute)</th>
+              <td><?php echo h($plant['SoilDepthAbsolute']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['SoilTextureOptimal']): ?>
+            <tr>
+              <th>Soil Texture (Optimal)</th>
+              <td><?php echo h($plant['SoilTextureOptimal']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['SoilTextureAbsolute']): ?>
+            <tr>
+              <th>Soil Texture (Absolute)</th>
+              <td><?php echo h($plant['SoilTextureAbsolute']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['SoilFertilityOptimal']): ?>
+            <tr>
+              <th>Soil Fertility (Optimal)</th>
+              <td><?php echo h($plant['SoilFertilityOptimal']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['SoilFertilityAbsolute']): ?>
+            <tr>
+              <th>Soil Fertility (Absolute)</th>
+              <td><?php echo h($plant['SoilFertilityAbsolute']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['SoilSalinityOptimal']): ?>
+            <tr>
+              <th>Soil Salinity (Optimal)</th>
+              <td><?php echo h($plant['SoilSalinityOptimal']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['SoilSalinityAbsolute']): ?>
+            <tr>
+              <th>Soil Salinity (Absolute)</th>
+              <td><?php echo h($plant['SoilSalinityAbsolute']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['SoilDrainageOptimal']): ?>
+            <tr>
+              <th>Soil Drainage (Optimal)</th>
+              <td><?php echo h($plant['SoilDrainageOptimal']); ?></td>
+            </tr>
+          <?php endif; ?>
+
+          <?php if ($plant['SoilDrainageAbsolute']): ?>
+            <tr>
+              <th>Soil Drainage (Absolute)</th>
+              <td><?php echo h($plant['SoilDrainageAbsolute']); ?></td>
+            </tr>
+          <?php endif; ?>
+        </table>
+      </div>
+
+      <div class="card" style="grid-column:span 2">
+        <h3>General Plant Info</h3>
+        <hr class="line"/>
+        <table>
+          <?php if ($plant['LifeForm']): ?>
+            <tr><th>Life Form</th><td><?php echo h($plant['LifeForm']); ?></td></tr>
+          <?php endif; ?>
+
+          <?php if ($plant['Physiology']): ?>
+            <tr><th>Physiology</th><td><?php echo h($plant['Physiology']); ?></td></tr>
+          <?php endif; ?>
+
+          <?php if ($plant['Habit']): ?>
+            <tr><th>Habit</th><td><?php echo h($plant['Habit']); ?></td></tr>
+          <?php endif; ?>
+
+          <?php if ($plant['Category']): ?>
+            <tr><th>Category</th><td><?php echo h($plant['Category']); ?></td></tr>
+          <?php endif; ?>
+
+          <?php if ($plant['LifeSpan']): ?>
+            <tr><th>Life Span</th><td><?php echo h($plant['LifeSpan']); ?></td></tr>
+          <?php endif; ?>
+
+          <?php if ($plant['PlantAttributes']): ?>
+            <tr><th>Plant Attributes</th><td><?php echo h($plant['PlantAttributes']); ?></td></tr>
+          <?php endif; ?>
+
+          <?php if ($plant['GrowingPeriod']): ?>
+            <tr><th>Growing Period</th><td><?php echo h($plant['GrowingPeriod']); ?></td></tr>
+          <?php endif; ?>
+
+          <?php if ($plant['CropCycle_Min'] !== null && $plant['CropCycle_Max'] !== null): ?>
+            <tr><th>Crop Cycle</th><td><?php echo h($plant['CropCycle_Min']); ?> - <?php echo h($plant['CropCycle_Max']); ?> days</td></tr>
+          <?php endif; ?>
+
+          <?php if ($plant['ProductSystem']): ?>
+            <tr><th>Product System</th><td><?php echo h($plant['ProductSystem']); ?></td></tr>
+          <?php endif; ?>
+        </table>
+      </div>
+
+      <div class="card" style="grid-column:span 2">
+        <h3>Further Information</h3>
+        <hr class="line"/>
+        <?php if ($plant['FurtherInformation']): ?>
+          <p><?php echo nl2br(h($plant['FurtherInformation'])); ?></p>
+        <?php else: ?>
+          <p>No additional background information available for this plant.</p>
+        <?php endif; ?>
+      </div>
+
+      <div class="card" style="grid-column:span 2">
+        <h3>Sources</h3>
+        <hr class="line"/>
+        <?php if ($plant['FinalSource']): ?>
+          <p><?php echo nl2br(h($plant['FinalSource'])); ?></p>
+        <?php endif; ?>
+      </div>
+
+      <div class="card" style="grid-column:span 3">
+        <h3>Uses</h3>
+        <hr class="line"/>
+        <?php
+          // Retrieve uses details
+          $uses_query = "SELECT UseID, MainUse, DetailedUse, UsedPart FROM plant_uses 
+                        WHERE PlantName = '" . mysqli_real_escape_string($db, $plant_name) . "' 
+                        ORDER BY UseID";
+          $uses_result = mysqli_query($db, $uses_query);
+          if (mysqli_num_rows($uses_result) > 0 || $plant['Uses'] != NULL):
+            ?>
+            <?php echo "<p>" . ($plant['Uses']) . "</p>"; ?>
+            <table>
+              <tr>
+                <th>Main Use</th>
+                <th>Detailed Use</th>
+                <th>Used Part</th>
+              </tr>
+              <?php while ($use = mysqli_fetch_assoc($uses_result)): ?>
+                <tr>
+                  <td><?php echo h($use['MainUse']); ?></td>
+                  <td><?php echo h($use['DetailedUse']); ?></td>
+                  <td><?php echo h($use['UsedPart']); ?></td>
+                </tr>
+              <?php endwhile; ?>
+            </table>
+          <?php else: ?>
+            <p>No uses available for this plant.</p>
+          <?php endif; ?>
+      </div>
+
+      <div class="card" style="grid-column:span 3">
+        <h3>Specific Cultivation</h3>
+        <hr class="line"/>
+        <?php
+          // Retrieve specific cultivation data
+          $cultivation_query = "SELECT Subsystem, CompanionSpecies, LevelOfMechanization, LabourIntensity 
+                                FROM specific_cultivation 
+                                WHERE PlantName = '" . mysqli_real_escape_string($db, $plant_name) . "' 
+                                ORDER BY CultivationID";
+          $cultivation_result = mysqli_query($db, $cultivation_query);
+
+          if (mysqli_num_rows($cultivation_result) > 0):
+        ?>
+          <table>
+            <tr>
+              <th>Subsystem</th>
+              <th>Companion Species</th>
+              <th>Level of Mechanization</th>
+              <th>Labour Intensity</th>
+            </tr>
+            <?php while ($cult = mysqli_fetch_assoc($cultivation_result)): ?>
+              <tr>
+                <td><?php echo h($cult['Subsystem']); ?></td>
+                <td><?php echo h($cult['CompanionSpecies']); ?></td>
+                <td><?php echo h($cult['LevelOfMechanization']); ?></td>
+                <td><?php echo h($cult['LabourIntensity']); ?></td>
+              </tr>
+            <?php endwhile; ?>
+          </table>
+        <?php else: ?>
+          <p>No specific cultivation information available for this plant.</p>
+        <?php endif; ?>
+      </div>
     </div>
 
-
-
-
-
-
-
-    <h2>General Information</h2>
-    <table border="1" cellspacing="0" cellpadding="5">
-      <tr>
-        <th>Uses</th>
-        <td><?php echo h($plant['Uses']); ?></td>
-      </tr>
-      <tr>
-        <th>Growing Period</th>
-        <td><?php echo h($plant['GrowingPeriod']); ?></td>
-      </tr>
-      <tr>
-        <th>Further Information</th>
-        <td><?php echo h($plant['FurtherInformation']); ?></td>
-      </tr>
-      <tr>
-        <th>Final Source</th>
-        <td><?php echo h($plant['FinalSource']); ?></td>
-      </tr>
-      <tr>
-        <th>Image</th>
-        <td><?php echo h($plant['Image']); ?></td>
-      </tr>
-      <tr>
-        <th>Life Form</th>
-        <td><?php echo h($plant['LifeForm']); ?></td>
-      </tr>
-      <tr>
-        <th>Physiology</th>
-        <td><?php echo h($plant['Physiology']); ?></td>
-      </tr>
-      <tr>
-        <th>Habit</th>
-        <td><?php echo h($plant['Habit']); ?></td>
-      </tr>
-      <tr>
-        <th>Category</th>
-        <td><?php echo h($plant['Category']); ?></td>
-      </tr>
-      <tr>
-        <th>Life Span</th>
-        <td><?php echo h($plant['LifeSpan']); ?></td>
-      </tr>
-      <tr>
-        <th>Plant Attributes</th>
-        <td><?php echo h($plant['PlantAttributes']); ?></td>
-      </tr>
-      <tr>
-        <th>Temp Required Optimal (Min)</th>
-        <td><?php echo h($plant['TempRequiredOptimalMin']); ?></td>
-      </tr>
-      <tr>
-        <th>Temp Required Optimal (Max)</th>
-        <td><?php echo h($plant['TempRequiredOptimalMax']); ?></td>
-      </tr>
-      <tr>
-        <th>Temp Required Absolute (Min)</th>
-        <td><?php echo h($plant['TempRequiredAbsoluteMin']); ?></td>
-      </tr>
-      <tr>
-        <th>Temp Required Absolute (Max)</th>
-        <td><?php echo h($plant['TempRequiredAbsoluteMax']); ?></td>
-      </tr>
-      <tr>
-        <th>Killing Temp During Rest</th>
-        <td><?php echo h($plant['KillingTemp_DuringRest']); ?></td>
-      </tr>
-      <tr>
-        <th>Killing Temp Early Growth</th>
-        <td><?php echo h($plant['KillingTemp_EarlyGrowth']); ?></td>
-      </tr>
-      <tr>
-        <th>Rainfall Annual Optimal (Min)</th>
-        <td><?php echo h($plant['RainfallAnnualOptimalMin']); ?></td>
-      </tr>
-      <tr>
-        <th>Rainfall Annual Optimal (Max)</th>
-        <td><?php echo h($plant['RainfallAnnualOptimalMax']); ?></td>
-      </tr>
-      <tr>
-        <th>Rainfall Annual Absolute (Min)</th>
-        <td><?php echo h($plant['RainfallAnnualAbsoluteMin']); ?></td>
-      </tr>
-      <tr>
-        <th>Rainfall Annual Absolute (Max)</th>
-        <td><?php echo h($plant['RainfallAnnualAbsoluteMax']); ?></td>
-      </tr>
-      <tr>
-        <th>Light Intensity Optimal (Min)</th>
-        <td><?php echo h($plant['LightIntensityOptimalMin']); ?></td>
-      </tr>
-      <tr>
-        <th>Light Intensity Optimal (Max)</th>
-        <td><?php echo h($plant['LightIntensityOptimalMax']); ?></td>
-      </tr>
-      <tr>
-        <th>Light Intensity Absolute (Min)</th>
-        <td><?php echo h($plant['LightIntensityAbsoluteMin']); ?></td>
-      </tr>
-      <tr>
-        <th>Light Intensity Absolute (Max)</th>
-        <td><?php echo h($plant['LightIntensityAbsoluteMax']); ?></td>
-      </tr>
-      <tr>
-        <th>Photoperiod</th>
-        <td><?php echo h($plant['Photoperiod']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil pH Optimal (Min)</th>
-        <td><?php echo h($plant['SoilPHOptimalMin']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil pH Optimal (Max)</th>
-        <td><?php echo h($plant['SoilPHOptimalMax']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Depth Optimal</th>
-        <td><?php echo h($plant['SoilDepthOptimal']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Depth Absolute</th>
-        <td><?php echo h($plant['SoilDepthAbsolute']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Texture Optimal</th>
-        <td><?php echo h($plant['SoilTextureOptimal']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Texture Absolute</th>
-        <td><?php echo h($plant['SoilTextureAbsolute']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Fertility Optimal</th>
-        <td><?php echo h($plant['SoilFertilityOptimal']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Fertility Absolute</th>
-        <td><?php echo h($plant['SoilFertilityAbsolute']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Salinity Optimal</th>
-        <td><?php echo h($plant['SoilSalinityOptimal']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Salinity Absolute</th>
-        <td><?php echo h($plant['SoilSalinityAbsolute']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Drainage Optimal</th>
-        <td><?php echo h($plant['SoilDrainageOptimal']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Drainage Absolute</th>
-        <td><?php echo h($plant['SoilDrainageAbsolute']); ?></td>
-      </tr>
-      <tr>
-        <th>Latitude Optimal (Min)</th>
-        <td><?php echo h($plant['LatitudeOptimalMin']); ?></td>
-      </tr>
-      <tr>
-        <th>Latitude Absolute (Min)</th>
-        <td><?php echo h($plant['LatitudeAbsoluteMin']); ?></td>
-      </tr>
-      <tr>
-        <th>Latitude Optimal (Max)</th>
-        <td><?php echo h($plant['LatitudeOptimalMax']); ?></td>
-      </tr>
-      <tr>
-        <th>Latitude Absolute (Max)</th>
-        <td><?php echo h($plant['LatitudeAbsoluteMax']); ?></td>
-      </tr>
-      <tr>
-        <th>Altitude Optimal (Min)</th>
-        <td><?php echo h($plant['AltitudeOptimalMin']); ?></td>
-      </tr>
-      <tr>
-        <th>Altitude Optimal (Max)</th>
-        <td><?php echo h($plant['AltitudeOptimalMax']); ?></td>
-      </tr>
-      <tr>
-        <th>Climate Zone</th>
-        <td><?php echo h($plant['ClimateZone']); ?></td>
-      </tr>
-      <tr>
-        <th>Altitude Absolute (Min)</th>
-        <td><?php echo h($plant['AltitudeAbsoluteMin']); ?></td>
-      </tr>
-      <tr>
-        <th>Altitude Absolute (Max)</th>
-        <td><?php echo h($plant['AltitudeAbsoluteMax']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil pH Absolute (Min)</th>
-        <td><?php echo h($plant['SoilPHAbsoluteMin']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil pH Absolute (Max)</th>
-        <td><?php echo h($plant['SoilPHAbsoluteMax']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Al Tox Optimal</th>
-        <td><?php echo h($plant['SoilAlToxOptimal']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Al Tox Absolute</th>
-        <td><?php echo h($plant['SoilAlToxAbsolute']); ?></td>
-      </tr>
-      <tr>
-        <th>Abiotic Tolerance</th>
-        <td><?php echo h($plant['AbioticTolerance']); ?></td>
-      </tr>
-      <tr>
-        <th>Abiotic Suscept</th>
-        <td><?php echo h($plant['AbioticSuscept']); ?></td>
-      </tr>
-      <tr>
-        <th>Introduction Risks</th>
-        <td><?php echo h($plant['IntroductionRisks']); ?></td>
-      </tr>
-      <tr>
-        <th>Product System</th>
-        <td><?php echo h($plant['ProductSystem']); ?></td>
-      </tr>
-      <tr>
-        <th>Crop Cycle (Min)</th>
-        <td><?php echo h($plant['CropCycle_Min']); ?></td>
-      </tr>
-      <tr>
-        <th>Crop Cycle (Max)</th>
-        <td><?php echo h($plant['CropCycle_Max']); ?></td>
-      </tr>
-    </table>
-
-    <h2>Uses</h2>
-    <?php
-    // Retrieve uses details for this plant
-    $uses_query = "SELECT UseID, MainUse, DetailedUse, UsedPart FROM plant_uses 
-                   WHERE PlantName = '" . mysqli_real_escape_string($db, $plant_name) . "' 
-                   ORDER BY UseID";
-    $uses_result = mysqli_query($db, $uses_query);
-    if (mysqli_num_rows($uses_result) > 0):
-      ?>
-      <table border="1" cellspacing="0" cellpadding="5">
-        <tr>
-          <th>Use ID</th>
-          <th>Main Use</th>
-          <th>Detailed Use</th>
-          <th>Used Part</th>
-        </tr>
-        <?php while ($use = mysqli_fetch_assoc($uses_result)): ?>
-          <tr>
-            <td><?php echo h($use['UseID']); ?></td>
-            <td><?php echo h($use['MainUse']); ?></td>
-            <td><?php echo h($use['DetailedUse']); ?></td>
-            <td><?php echo h($use['UsedPart']); ?></td>
-          </tr>
-        <?php endwhile; ?>
-      </table>
-    <?php else: ?>
-      <p>No uses available for this plant.</p>
-    <?php endif; ?>
-
-    <h2>Specific Cultivation Details</h2>
-    <?php
-    // Retrieve cultivation details for this plant
-    $cultivation_query = "SELECT * FROM specific_cultivation 
-                          WHERE PlantName = '" . mysqli_real_escape_string($db, $plant_name) . "' 
-                          ORDER BY CultivationID";
-    $cultivation_result = mysqli_query($db, $cultivation_query);
-    if (mysqli_num_rows($cultivation_result) > 0):
-      // Assuming additional columns exist in specific_cultivation aside from PlantName
-      // Here we build a header manually using the keys from the first row (except PlantName)
-      $firstCultivation = mysqli_fetch_assoc($cultivation_result);
-      ?>
-      <table border="1" cellspacing="0" cellpadding="5">
-        <tr>
-          <?php if (isset($firstCultivation['CultivationID'])): ?>
-            <th>Cultivation ID</th>
-          <?php endif; ?>
-          <?php
-          foreach ($firstCultivation as $field => $value) {
-            if ($field == 'PlantName' || $field == 'CultivationID') {
-              continue;
-            }
-            echo "<th>" . h($field) . "</th>";
-          }
-          ?>
-        </tr>
-        <tr>
-          <?php if (isset($firstCultivation['CultivationID'])): ?>
-            <td><?php echo h($firstCultivation['CultivationID']); ?></td>
-          <?php endif; ?>
-          <?php
-          foreach ($firstCultivation as $field => $value) {
-            if ($field == 'PlantName' || $field == 'CultivationID') {
-              continue;
-            }
-            echo "<td>" . h($value) . "</td>";
-          }
-          ?>
-        </tr>
-        <?php while ($cultivation = mysqli_fetch_assoc($cultivation_result)): ?>
-          <tr>
-            <?php if (isset($cultivation['CultivationID'])): ?>
-              <td><?php echo h($cultivation['CultivationID']); ?></td>
-            <?php endif; ?>
-            <?php
-            foreach ($cultivation as $field => $value) {
-              if ($field == 'PlantName' || $field == 'CultivationID') {
-                continue;
-              }
-              echo "<td>" . h($value) . "</td>";
-            }
-            ?>
-          </tr>
-        <?php endwhile; ?>
-      </table>
-    <?php else: ?>
-      <p>No cultivation details available for this plant.</p>
-    <?php endif; ?>
-
-    <h2>Comments</h2>
+    <br/>
+    <br/>
+    <h3>Comments</h3>
+    <hr class="line"/>
     <?php
     // Fetch all approved comments for this plant
     $comments_query = "SELECT c.*, u.Name AS UserName FROM comments c
@@ -474,7 +652,7 @@ if (is_post_request() && isset($_POST['content'])) {
     }
     ?>
 
-    <h2>Add a Comment</h2>
+    <h3>Add a Comment</h3>
     <?php if (isset($_SESSION['username'])): ?>
       <div id="comment-response" style="color: green;"></div>
 
