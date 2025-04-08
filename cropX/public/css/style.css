@@ -411,6 +411,7 @@ footer{
   border-radius: 6px;
   border: var(--mainGreen) solid 1px;
   padding: 1em;
+  word-break: break-word;
 }
 
 .imgCard{

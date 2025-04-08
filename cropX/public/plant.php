@@ -456,6 +456,66 @@ if (is_post_request() && isset($_POST['content'])) {
         </table>
       </div>
 
+      <div class="card" style="grid-column:span 2">
+        <h3>General Plant Info</h3>
+        <hr class="line"/>
+        <table>
+          <?php if ($plant['LifeForm']): ?>
+            <tr><th>Life Form</th><td><?php echo h($plant['LifeForm']); ?></td></tr>
+          <?php endif; ?>
+
+          <?php if ($plant['Physiology']): ?>
+            <tr><th>Physiology</th><td><?php echo h($plant['Physiology']); ?></td></tr>
+          <?php endif; ?>
+
+          <?php if ($plant['Habit']): ?>
+            <tr><th>Habit</th><td><?php echo h($plant['Habit']); ?></td></tr>
+          <?php endif; ?>
+
+          <?php if ($plant['Category']): ?>
+            <tr><th>Category</th><td><?php echo h($plant['Category']); ?></td></tr>
+          <?php endif; ?>
+
+          <?php if ($plant['LifeSpan']): ?>
+            <tr><th>Life Span</th><td><?php echo h($plant['LifeSpan']); ?></td></tr>
+          <?php endif; ?>
+
+          <?php if ($plant['PlantAttributes']): ?>
+            <tr><th>Plant Attributes</th><td><?php echo h($plant['PlantAttributes']); ?></td></tr>
+          <?php endif; ?>
+
+          <?php if ($plant['GrowingPeriod']): ?>
+            <tr><th>Growing Period</th><td><?php echo h($plant['GrowingPeriod']); ?></td></tr>
+          <?php endif; ?>
+
+          <?php if ($plant['CropCycle_Min'] !== null && $plant['CropCycle_Max'] !== null): ?>
+            <tr><th>Crop Cycle</th><td><?php echo h($plant['CropCycle_Min']); ?> - <?php echo h($plant['CropCycle_Max']); ?> days</td></tr>
+          <?php endif; ?>
+
+          <?php if ($plant['ProductSystem']): ?>
+            <tr><th>Product System</th><td><?php echo h($plant['ProductSystem']); ?></td></tr>
+          <?php endif; ?>
+        </table>
+      </div>
+
+      <div class="card" style="grid-column:span 2">
+        <h3>Further Information</h3>
+        <hr class="line"/>
+        <?php if ($plant['FurtherInformation']): ?>
+          <p><?php echo nl2br(h($plant['FurtherInformation'])); ?></p>
+        <?php else: ?>
+          <p>No additional background information available for this plant.</p>
+        <?php endif; ?>
+      </div>
+
+      <div class="card" style="grid-column:span 2">
+        <h3>Sources</h3>
+        <hr class="line"/>
+        <?php if ($plant['FinalSource']): ?>
+          <p><?php echo nl2br(h($plant['FinalSource'])); ?></p>
+        <?php endif; ?>
+      </div>
+
       <div class="card" style="grid-column:span 3">
         <h3>Uses</h3>
         <hr class="line"/>
@@ -520,174 +580,12 @@ if (is_post_request() && isset($_POST['content'])) {
           <p>No specific cultivation information available for this plant.</p>
         <?php endif; ?>
       </div>
-
     </div>
 
-
-
-
-
-    <h2>General Information</h2>
-    <table border="1" cellspacing="0" cellpadding="5">
-      <tr>
-        <th>Growing Period</th>
-        <td><?php echo h($plant['GrowingPeriod']); ?></td>
-      </tr>
-      <tr>
-        <th>Further Information</th>
-        <td><?php echo h($plant['FurtherInformation']); ?></td>
-      </tr>
-      <tr>
-        <th>Final Source</th>
-        <td><?php echo h($plant['FinalSource']); ?></td>
-      </tr>
-      <tr>
-        <th>Life Form</th>
-        <td><?php echo h($plant['LifeForm']); ?></td>
-      </tr>
-      <tr>
-        <th>Physiology</th>
-        <td><?php echo h($plant['Physiology']); ?></td>
-      </tr>
-      <tr>
-        <th>Habit</th>
-        <td><?php echo h($plant['Habit']); ?></td>
-      </tr>
-      <tr>
-        <th>Category</th>
-        <td><?php echo h($plant['Category']); ?></td>
-      </tr>
-      <tr>
-        <th>Life Span</th>
-        <td><?php echo h($plant['LifeSpan']); ?></td>
-      </tr>
-      <tr>
-        <th>Plant Attributes</th>
-        <td><?php echo h($plant['PlantAttributes']); ?></td>
-      </tr>
-      <tr>
-        <th>Killing Temp During Rest</th>
-        <td><?php echo h($plant['KillingTemp_DuringRest']); ?></td>
-      </tr>
-      <tr>
-        <th>Killing Temp Early Growth</th>
-        <td><?php echo h($plant['KillingTemp_EarlyGrowth']); ?></td>
-      </tr>
-      <tr>
-        <th>Photoperiod</th>
-        <td><?php echo h($plant['Photoperiod']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil pH Optimal (Min)</th>
-        <td><?php echo h($plant['SoilPHOptimalMin']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil pH Optimal (Max)</th>
-        <td><?php echo h($plant['SoilPHOptimalMax']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Depth Optimal</th>
-        <td><?php echo h($plant['SoilDepthOptimal']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Depth Absolute</th>
-        <td><?php echo h($plant['SoilDepthAbsolute']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Texture Optimal</th>
-        <td><?php echo h($plant['SoilTextureOptimal']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Texture Absolute</th>
-        <td><?php echo h($plant['SoilTextureAbsolute']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Fertility Optimal</th>
-        <td><?php echo h($plant['SoilFertilityOptimal']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Fertility Absolute</th>
-        <td><?php echo h($plant['SoilFertilityAbsolute']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Salinity Optimal</th>
-        <td><?php echo h($plant['SoilSalinityOptimal']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Salinity Absolute</th>
-        <td><?php echo h($plant['SoilSalinityAbsolute']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Drainage Optimal</th>
-        <td><?php echo h($plant['SoilDrainageOptimal']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Drainage Absolute</th>
-        <td><?php echo h($plant['SoilDrainageAbsolute']); ?></td>
-      </tr>
-      <tr>
-        <th>Altitude Optimal (Min)</th>
-        <td><?php echo h($plant['AltitudeOptimalMin']); ?></td>
-      </tr>
-      <tr>
-        <th>Altitude Optimal (Max)</th>
-        <td><?php echo h($plant['AltitudeOptimalMax']); ?></td>
-      </tr>
-      <tr>
-        <th>Climate Zone</th>
-        <td><?php echo h($plant['ClimateZone']); ?></td>
-      </tr>
-      <tr>
-        <th>Altitude Absolute (Min)</th>
-        <td><?php echo h($plant['AltitudeAbsoluteMin']); ?></td>
-      </tr>
-      <tr>
-        <th>Altitude Absolute (Max)</th>
-        <td><?php echo h($plant['AltitudeAbsoluteMax']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil pH Absolute (Min)</th>
-        <td><?php echo h($plant['SoilPHAbsoluteMin']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil pH Absolute (Max)</th>
-        <td><?php echo h($plant['SoilPHAbsoluteMax']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Al Tox Optimal</th>
-        <td><?php echo h($plant['SoilAlToxOptimal']); ?></td>
-      </tr>
-      <tr>
-        <th>Soil Al Tox Absolute</th>
-        <td><?php echo h($plant['SoilAlToxAbsolute']); ?></td>
-      </tr>
-      <tr>
-        <th>Abiotic Tolerance</th>
-        <td><?php echo h($plant['AbioticTolerance']); ?></td>
-      </tr>
-      <tr>
-        <th>Abiotic Suscept</th>
-        <td><?php echo h($plant['AbioticSuscept']); ?></td>
-      </tr>
-      <tr>
-        <th>Introduction Risks</th>
-        <td><?php echo h($plant['IntroductionRisks']); ?></td>
-      </tr>
-      <tr>
-        <th>Product System</th>
-        <td><?php echo h($plant['ProductSystem']); ?></td>
-      </tr>
-      <tr>
-        <th>Crop Cycle (Min)</th>
-        <td><?php echo h($plant['CropCycle_Min']); ?></td>
-      </tr>
-      <tr>
-        <th>Crop Cycle (Max)</th>
-        <td><?php echo h($plant['CropCycle_Max']); ?></td>
-      </tr>
-    </table>
-
-    <h2>Comments</h2>
+    <br/>
+    <br/>
+    <h3>Comments</h3>
+    <hr class="line"/>
     <?php
     // Retrieve approved comments for this plant
     $comments_query = "SELECT c.*, u.Name AS UserName FROM comments c 
