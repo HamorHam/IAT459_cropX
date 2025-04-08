@@ -68,7 +68,7 @@ if (is_post_request() && isset($_POST['content'])) {
     <div id="detail-cards">
       <div class="card" style="grid-column:span 4">
         <h3>General Information</h3>
-        <hr class="line"/>
+        <hr class="line" />
         <table>
           <tr>
             <th>Plant Name</th>
@@ -94,9 +94,11 @@ if (is_post_request() && isset($_POST['content'])) {
       </div>
 
       <?php if (isset($plant['Image']) && trim($plant['Image']) !== ""): ?>
-        <img class="imgCard" style="grid-column:span 2" src="<?php echo h($plant['Image']); ?>" alt="<?php echo h($plant['PlantName']); ?>">
+        <img class="imgCard" style="grid-column:span 2" src="<?php echo h($plant['Image']); ?>"
+          alt="<?php echo h($plant['PlantName']); ?>">
       <?php else: ?>
-        <img class="imgCard" style="grid-column:span 2" src="<?php echo url_for('/img/default.jpeg'); ?>" alt="Default Image">
+        <img class="imgCard" style="grid-column:span 2" src="<?php echo url_for('/img/default.jpeg'); ?>"
+          alt="Default Image">
       <?php endif; ?>
     </div>
 
@@ -428,33 +430,53 @@ if (is_post_request() && isset($_POST['content'])) {
 
     <h2>Comments</h2>
     <?php
-    // Retrieve approved comments for this plant
-    $comments_query = "SELECT c.*, u.Name AS UserName FROM comments c 
-                       LEFT JOIN user u ON c.UserID = u.UserID 
-                       WHERE c.PlantName = '" . mysqli_real_escape_string($db, $plant_name) . "' 
-                         AND c.IsApproved = 1
-                       ORDER BY c.CommentDate ASC";
+    // Fetch all approved comments for this plant
+    $comments_query = "SELECT c.*, u.Name AS UserName FROM comments c
+                   LEFT JOIN user u ON c.UserID = u.UserID
+                   WHERE c.PlantName = '" . mysqli_real_escape_string($db, $plant_name) . "'
+                     AND c.IsApproved = 1
+                   ORDER BY c.CommentDate ASC";
     $comments_result = mysqli_query($db, $comments_query);
-    if (mysqli_num_rows($comments_result) > 0):
-      ?>
-      <ul>
-        <?php while ($comment = mysqli_fetch_assoc($comments_result)): ?>
-          <li>
-            <p><strong><?php echo h($comment['UserName'] ?? 'Anonymous'); ?></strong> on
-              <?php echo h($comment['CommentDate']); ?></p>
-            <p><?php echo nl2br(h($comment['Content'])); ?></p>
-          </li>
-        <?php endwhile; ?>
-      </ul>
-    <?php else: ?>
-      <p>No comments yet. Be the first to comment!</p>
-    <?php endif; ?>
+
+    $comments_by_parent = [];
+    while ($comment = mysqli_fetch_assoc($comments_result)) {
+      $parent_id = $comment['ParentCommentID'] ?? 0;
+      if (!isset($comments_by_parent[$parent_id])) {
+        $comments_by_parent[$parent_id] = [];
+      }
+      $comments_by_parent[$parent_id][] = $comment;
+    }
+
+    function render_comments($parent_id, $comments_by_parent)
+    {
+      if (!isset($comments_by_parent[$parent_id]))
+        return;
+      echo "<ul>";
+      foreach ($comments_by_parent[$parent_id] as $comment) {
+        echo "<li>";
+        echo "<p><strong>" . h($comment['UserName'] ?? 'Anonymous') . "</strong> on " . h($comment['CommentDate']) . "</p>";
+        echo "<p>" . nl2br(h($comment['Content'])) . "</p>";
+        echo "<button class='reply-btn' data-id='" . h($comment['CommentID']) . "'>Reply</button>";
+        // Render nested replies
+        render_comments($comment['CommentID'], $comments_by_parent);
+        echo "</li>";
+      }
+      echo "</ul>";
+    }
+
+    if (isset($comments_by_parent[0])) {
+      render_comments(0, $comments_by_parent);
+    } else {
+      echo "<p>No comments yet. Be the first to comment!</p>";
+    }
+    ?>
 
     <h2>Add a Comment</h2>
     <?php if (isset($_SESSION['username'])): ?>
       <div id="comment-response" style="color: green;"></div>
       <form id="comment-form">
         <input type="hidden" name="plant_name" value="<?php echo h($plant_name); ?>" />
+        <input type="hidden" name="parent_comment_id" id="parent_comment_id" value="0" />
         <label for="content">Comment:</label><br />
         <textarea name="content" required rows="5" cols="50"></textarea><br />
         <input type="submit" value="Submit Comment" />
@@ -469,13 +491,20 @@ if (is_post_request() && isset($_POST['content'])) {
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("comment-form");
   const responseDiv = document.getElementById("comment-response");
+  const parentInput = document.getElementById("parent_comment_id");
 
   if (form) {
+    document.querySelectorAll(".reply-btn").forEach(button => {
+      button.addEventListener("click", function () {
+        const commentID = this.getAttribute("data-id");
+        parentInput.value = commentID;
+        form.scrollIntoView({ behavior: "smooth" });
+      });
+    });
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-
       const formData = new FormData(form);
-
       fetch("<?php echo url_for('/submit_comment.php'); ?>", {
         method: "POST",
         body: formData
@@ -486,6 +515,7 @@ document.addEventListener("DOMContentLoaded", function () {
         responseDiv.textContent = data.message;
         if (data.status === "success") {
           form.reset();
+          parentInput.value = 0;
         }
       })
       .catch(() => {
