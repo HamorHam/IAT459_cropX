@@ -58,6 +58,7 @@ header{
   border-bottom: 1px solid var(--accentGreen);
   position: fixed;
   top: 0;
+  z-index: 99;
 }
 
 footer{
@@ -252,11 +253,6 @@ footer{
   min-height: calc(100vh - 68.5px - 1.5em - 59px);
 }
 
-#content p {
-  font-size: 1rem;
-  margin-bottom: 1.875rem; /* 30px */
-}
-
 #content form input {
   padding: 0.6em 1.2em 0.45em;
   border: 1px solid var(--accentGreen);
@@ -422,7 +418,7 @@ footer{
   overflow: hidden;
   padding: 0;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 2px);
   object-fit: cover;
   border: var(--mainGreen) solid 1px;
 }
@@ -430,6 +426,7 @@ footer{
 .card table{
   border-collapse: collapse;
   text-align: left;
+  width: 100%;
 }
 
 .card th{
@@ -452,4 +449,58 @@ footer{
 
 .card tr:last-child{
   border-bottom: none;
+}
+
+.mainBar{
+  position: relative;
+  height: 4px;
+  background: #ddd;
+  border-radius: 4px;
+  margin: 1em 0;
+}
+
+.optimal-range{
+  position: absolute; 
+  background: var(--secondaccent);
+  height: 100%;
+  border-radius: 4px;
+}
+
+.rangeLabels{
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0 1rem;
+}
+
+.rightAlign{
+  text-align: right;
+}
+
+
+
+
+
+
+.map-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  aspect-ratio: 2 / 1;
+  margin: 2rem auto;
+}
+.map-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.lat-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: rgba(0, 150, 0, 0.25); /* greenish fill */
+  pointer-events: none;
+}
+.opt-range {
+  background: var(--mainGreen); /* darker green for optimal */
+  z-index: 1; /* Ensure optimal range is on top */
 }
