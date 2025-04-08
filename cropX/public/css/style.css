@@ -40,7 +40,7 @@ h3{
   font-size: 18px;
 }
 
-h4{
+h4, th{
   color: var(--accentGreen);
   font-weight: 500;
   font-style: italic;
@@ -395,4 +395,61 @@ footer{
   text-decoration: none;
   color: #2d3a2d;
   font-weight: bold;
+}
+
+#detail-cards{
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(3, fit-content);
+  margin-top: 1em;
+  gap: 6px;
+}
+
+.line {
+  border-top: solid var(--accentGreen) 1px;
+}
+
+.card {
+  background-color: var(--background);
+  border-radius: 6px;
+  border: var(--mainGreen) solid 1px;
+  padding: 1em;
+}
+
+.imgCard{
+  border-radius: 6px;
+  overflow: hidden;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: var(--mainGreen) solid 1px;
+}
+
+.card table{
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.card th{
+  color: var(--mainGreen);
+  vertical-align: top;
+  min-width: 140px;
+}
+
+.card td, th{
+  padding: .5em 0;
+}
+
+.card td{
+  vertical-align: top;
+}
+
+.card tr{
+  border-bottom: var(--accentGreen) solid .5px;
+}
+
+.card tr:last-child{
+  border-bottom: none;
 }

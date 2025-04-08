@@ -65,28 +65,49 @@ if (is_post_request() && isset($_POST['content'])) {
   <?php else: ?>
     <h1><?php echo h($plant['PlantName']); ?></h1>
 
+    <div id="detail-cards">
+      <div class="card" style="grid-column:span 4">
+        <h3>General Information</h3>
+        <hr class="line"/>
+        <table>
+          <tr>
+            <th>Plant Name</th>
+            <td><?php echo h($plant['PlantName']); ?></td>
+          </tr>
+          <tr>
+            <th>Family</th>
+            <td><?php echo h($plant['Family']); ?></td>
+          </tr>
+          <tr>
+            <th>Synonyms</th>
+            <td><?php echo h($plant['Synonyms']); ?></td>
+          </tr>
+          <tr>
+            <th>Common Names</th>
+            <td><?php echo h($plant['CommonNames']); ?></td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td><?php echo h($plant['Description']); ?></td>
+          </tr>
+        </table>
+      </div>
+
+      <?php if (isset($plant['Image']) && trim($plant['Image']) !== ""): ?>
+        <img class="imgCard" style="grid-column:span 2" src="<?php echo h($plant['Image']); ?>" alt="<?php echo h($plant['PlantName']); ?>">
+      <?php else: ?>
+        <img class="imgCard" style="grid-column:span 2" src="<?php echo url_for('/img/default.jpeg'); ?>" alt="Default Image">
+      <?php endif; ?>
+    </div>
+
+
+
+
+
+
+
     <h2>General Information</h2>
     <table border="1" cellspacing="0" cellpadding="5">
-      <tr>
-        <th>Plant Name</th>
-        <td><?php echo h($plant['PlantName']); ?></td>
-      </tr>
-      <tr>
-        <th>Family</th>
-        <td><?php echo h($plant['Family']); ?></td>
-      </tr>
-      <tr>
-        <th>Synonyms</th>
-        <td><?php echo h($plant['Synonyms']); ?></td>
-      </tr>
-      <tr>
-        <th>Common Names</th>
-        <td><?php echo h($plant['CommonNames']); ?></td>
-      </tr>
-      <tr>
-        <th>Description</th>
-        <td><?php echo h($plant['Description']); ?></td>
-      </tr>
       <tr>
         <th>Uses</th>
         <td><?php echo h($plant['Uses']); ?></td>
