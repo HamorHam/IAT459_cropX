@@ -438,6 +438,7 @@ if (is_post_request() && isset($_POST['content'])) {
                    ORDER BY c.CommentDate ASC";
     $comments_result = mysqli_query($db, $comments_query);
 
+    // Organize comments by their parent ID to support nesting
     $comments_by_parent = [];
     while ($comment = mysqli_fetch_assoc($comments_result)) {
       $parent_id = $comment['ParentCommentID'] ?? 0;
@@ -447,6 +448,7 @@ if (is_post_request() && isset($_POST['content'])) {
       $comments_by_parent[$parent_id][] = $comment;
     }
 
+    // Recursive function to display comments and their replies
     function render_comments($parent_id, $comments_by_parent)
     {
       if (!isset($comments_by_parent[$parent_id]))
@@ -464,6 +466,7 @@ if (is_post_request() && isset($_POST['content'])) {
       echo "</ul>";
     }
 
+    // Start rendering from top-level comments (ParentCommentID = 0)
     if (isset($comments_by_parent[0])) {
       render_comments(0, $comments_by_parent);
     } else {
@@ -474,6 +477,8 @@ if (is_post_request() && isset($_POST['content'])) {
     <h2>Add a Comment</h2>
     <?php if (isset($_SESSION['username'])): ?>
       <div id="comment-response" style="color: green;"></div>
+
+      <!-- Comment form for both top-level and reply submissions -->
       <form id="comment-form">
         <input type="hidden" name="plant_name" value="<?php echo h($plant_name); ?>" />
         <input type="hidden" name="parent_comment_id" id="parent_comment_id" value="0" />
@@ -487,44 +492,45 @@ if (is_post_request() && isset($_POST['content'])) {
   <?php endif; ?>
 </div>
 
+<!-- JavaScript to handle comment submission and reply setup -->
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const form = document.getElementById("comment-form");
-  const responseDiv = document.getElementById("comment-response");
-  const parentInput = document.getElementById("parent_comment_id");
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("comment-form");
+    const responseDiv = document.getElementById("comment-response");
+    const parentInput = document.getElementById("parent_comment_id");
 
-  if (form) {
-    document.querySelectorAll(".reply-btn").forEach(button => {
-      button.addEventListener("click", function () {
-        const commentID = this.getAttribute("data-id");
-        parentInput.value = commentID;
-        form.scrollIntoView({ behavior: "smooth" });
+    if (form) {
+      document.querySelectorAll(".reply-btn").forEach(button => {
+        button.addEventListener("click", function () {
+          const commentID = this.getAttribute("data-id");
+          parentInput.value = commentID;
+          form.scrollIntoView({ behavior: "smooth" });
+        });
       });
-    });
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const formData = new FormData(form);
-      fetch("<?php echo url_for('/submit_comment.php'); ?>", {
-        method: "POST",
-        body: formData
-      })
-      .then(res => res.json())
-      .then(data => {
-        responseDiv.style.color = data.status === "success" ? "green" : "red";
-        responseDiv.textContent = data.message;
-        if (data.status === "success") {
-          form.reset();
-          parentInput.value = 0;
-        }
-      })
-      .catch(() => {
-        responseDiv.style.color = "red";
-        responseDiv.textContent = "Something went wrong. Please try again.";
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+        fetch("<?php echo url_for('/submit_comment.php'); ?>", {
+          method: "POST",
+          body: formData
+        })
+          .then(res => res.json())
+          .then(data => {
+            responseDiv.style.color = data.status === "success" ? "green" : "red";
+            responseDiv.textContent = data.message;
+            if (data.status === "success") {
+              form.reset();
+              parentInput.value = 0;
+            }
+          })
+          .catch(() => {
+            responseDiv.style.color = "red";
+            responseDiv.textContent = "Something went wrong. Please try again.";
+          });
       });
-    });
-  }
-});
+    }
+  });
 </script>
 
 <?php include(SHARED_PATH . '/public_footer.php'); ?>
