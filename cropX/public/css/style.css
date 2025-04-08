@@ -493,11 +493,11 @@ footer{
   position: absolute;
   left: 0;
   right: 0;
-  background: rgba(0, 150, 0, 0.25);
+  background: rgba(0, 100, 0, .25);
   pointer-events: none;
 }
 .opt-range {
-  background: var(--mainGreen);
+  background: rgba(0, 100, 0, .5);
   z-index: 1;
 }
 

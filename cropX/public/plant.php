@@ -260,37 +260,43 @@ if (is_post_request() && isset($_POST['content'])) {
           $absMax = $plant['LatitudeAbsoluteMax'];
           $optMin = $plant['LatitudeOptimalMin'];
           $optMax = $plant['LatitudeOptimalMax'];
-
           $has_any_data = is_numeric($absMin) && is_numeric($absMax) && is_numeric($optMin) && is_numeric($optMax);
-
           $show_abs = ($absMin != 0 || $absMax != 0);
           $show_opt = ($optMin != 0 || $optMax != 0);
+          function latToPosition($lat) {
+            if ($lat >= 0) {
+              // northern hemisphere
+              return 50 - (sin(deg2rad($lat)) * 50);
+            } else {
+              //southern hemisphere
+              return 50 + (sin(deg2rad(abs($lat))) * 50);
+            }
+          }
         ?>
-
         <?php if ($has_any_data && ($show_abs || $show_opt)): ?>
           <div class="map-wrapper">
             <img src="/IAT459_CROPX/cropX/public/img/lat-map.png" alt="World Map" class="map-image" />
             <?php if ($show_abs): ?>
               <div class="lat-band abs-range" 
-                  style="top: <?php echo 50 - ($absMax * 50 / 90); ?>%; 
-                        height: <?php echo ($absMax - $absMin) * 50 / 90; ?>%;">
+                  style="top: <?php echo latToPosition($absMax); ?>%; 
+                        height: <?php echo latToPosition($absMin) - latToPosition($absMax); ?>%;">
               </div>
             <?php endif; ?>
             <?php if ($show_opt): ?>
               <div class="lat-band opt-range" 
-                  style="top: <?php echo 50 - ($optMax * 50 / 90); ?>%; 
-                        height: <?php echo ($optMax - $optMin) * 50 / 90; ?>%;">
+                  style="top: <?php echo latToPosition($optMin); ?>%; 
+                        height: <?php echo latToPosition($optMax) - latToPosition($optMin); ?>%;">
               </div>
             <?php endif; ?>
             <div class="user-latitude" 
-              style="top: <?php echo 50 - ($user['Latitude'] * 50/90); ?>%;">
+              style="top: <?php echo latToPosition($user['Latitude']); ?>%;">
             </div>
           </div>
           <table>
             <?php if ($show_opt): ?>
               <tr>
                 <th>Optimal</th>
-                <td class="rightAlign"><?php echo h($optMin); ?> - <?php echo h($optMax); ?>°</td>
+                <td class="rightAlign"><?php echo h($optMax); ?> - <?php echo h($optMin); ?>°</td>
               </tr>
             <?php endif; ?>
             <?php if ($show_abs): ?>
