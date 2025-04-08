@@ -424,31 +424,31 @@ footer{
   border: var(--mainGreen) solid 1px;
 }
 
-.card table{
+table{
   border-collapse: collapse;
   text-align: left;
   width: 100%;
 }
 
-.card th{
+th{
   color: var(--mainGreen);
   vertical-align: top;
   min-width: 140px;
 }
 
-.card td, th{
+td, th{
   padding: .5em 0;
 }
 
-.card td{
+td{
   vertical-align: top;
 }
 
-.card tr{
+tr{
   border-bottom: var(--accentGreen) solid .5px;
 }
 
-.card tr:last-child{
+tr:last-child{
   border-bottom: none;
 }
 
@@ -551,15 +551,14 @@ footer{
 }
 
 .reply-btn{
-  color: var(--mainGreen);
-  border-radius: 20px;
-  border: none;
-  background-color: var(--background);
-  transition: background-color 0.3s ease;
-  padding: 0.4em 0.8em;
-  cursor: pointer;
-  font-size: 14px;
-  float: right;
+  color: var(--mainGreen)!important;
+  border-radius: 20px!important;
+  border: solid var(--mainGreen) 1px!important;
+  background-color: var(--background)!important;
+  transition: background-color 0.3s ease!important;
+  padding: 0.4em 0.8em!important;
+  cursor: pointer!important;
+  font-size: 14px!important;
   font-weight: 600;
   font-style: italic;
 }
@@ -585,4 +584,8 @@ footer{
 #comment-response {
   margin-top: 0.5rem;
   font-weight: 500;
+}
+
+tbody td{
+  vertical-align: middle!important;
 }

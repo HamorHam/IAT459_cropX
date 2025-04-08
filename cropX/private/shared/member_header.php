@@ -25,8 +25,10 @@
           </form>
         </li>
         <li><a href="<?php echo url_for('/member/index.php'); ?>">Dashboard</a></li>
+        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'moderator'): ?>
+          <li><a href="<?php echo url_for('/member/review_comments.php'); ?>">Review Comments</a></li>
+        <?php endif; ?>
         <li><a href="<?php echo url_for('/member/logout.php'); ?>">Logout</a></li>
-        <!--<li><a href="<?php echo url_for('/filter.php'); ?>">Filter</a></li>-->
       </ul>
     </nav>
     <label for="nav-toggle" class="nav-toggle-label">

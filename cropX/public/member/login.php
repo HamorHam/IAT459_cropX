@@ -14,7 +14,7 @@ if (is_post_request()) {
   $password = $_POST['password'] ?? '';
 
   // Look up the user by username
-  $query = "SELECT * FROM user WHERE Name = ? AND IsVerified = 1";
+  $query = "SELECT * FROM user WHERE Name = ?";
   $stmt = $db->prepare($query);
   $stmt->bind_param("s", $username);
   $stmt->execute();

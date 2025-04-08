@@ -53,8 +53,7 @@ include(SHARED_PATH . '/member_header.php');
   <?php if (!empty($message)) echo "<p>" . h($message) . "</p>"; ?>
   
   <?php if (mysqli_num_rows($result) > 0): ?>
-    <table border="1" cellspacing="0" cellpadding="5">
-      <thead>
+    <table>
         <tr>
           <th>Comment ID</th>
           <th>Plant</th>
@@ -63,8 +62,6 @@ include(SHARED_PATH . '/member_header.php');
           <th>Content</th>
           <th>Actions</th>
         </tr>
-      </thead>
-      <tbody>
       <?php while ($comment = mysqli_fetch_assoc($result)): ?>
         <tr>
           <td><?php echo h($comment['CommentID']); ?></td>
@@ -75,16 +72,15 @@ include(SHARED_PATH . '/member_header.php');
           <td>
             <form action="review_comments.php" method="post" style="display:inline;">
               <input type="hidden" name="comment_id" value="<?php echo h($comment['CommentID']); ?>">
-              <input type="submit" name="approve" value="Approve">
+              <button class="reply-btn" type="submit" name="approve" value="Approve">Approve</button>
             </form>
             <form action="review_comments.php" method="post" style="display:inline;">
               <input type="hidden" name="comment_id" value="<?php echo h($comment['CommentID']); ?>">
-              <input type="submit" name="reject" value="Reject">
+              <button class="reply-btn" type="submit" name="reject" value="Reject">Reject</button>
             </form>
           </td>
         </tr>
       <?php endwhile; ?>
-      </tbody>
     </table>
   <?php else: ?>
     <p>No pending comments for review.</p>
