@@ -17,6 +17,7 @@ if (is_post_request()) {
   $latitude = $_POST['latitude'] ?? '';
   $longitude = $_POST['longitude'] ?? '';
   $role = 'user'; // default role
+  $verification_code = strval(rand(100000, 999999));// 6-digit code
 
   //  Check if passwords match
   if ($password === $password_confirm) {
@@ -35,23 +36,33 @@ if (is_post_request()) {
       $errors[] = 'The username already exists. Please try another.';
     } elseif ($email_count != 0) {
       $errors[] = 'This email is already registered. Please use another email.';
-
     } else {
-      //  Hash password and insert user
       $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-      $insert_user_query = "INSERT INTO user (Role, Name, Password, Email, Latitude, Longitude) VALUES (
-        '" . mysqli_real_escape_string($db, $role) . "',
-        '" . mysqli_real_escape_string($db, $name) . "',
-        '" . mysqli_real_escape_string($db, $hashed_password) . "',
-        '" . mysqli_real_escape_string($db, $email) . "',
-        '" . mysqli_real_escape_string($db, $latitude) . "',
-        '" . mysqli_real_escape_string($db, $longitude) . "'
-      )";
+      $insert_user_query = "INSERT INTO user (Role, Name, Password, Email, Latitude, Longitude, VerificationCode, IsVerified)
+                            VALUES (
+                              '" . mysqli_real_escape_string($db, $role) . "',
+                              '" . mysqli_real_escape_string($db, $name) . "',
+                              '" . mysqli_real_escape_string($db, $hashed_password) . "',
+                              '" . mysqli_real_escape_string($db, $email) . "',
+                              '" . mysqli_real_escape_string($db, $latitude) . "',
+                              '" . mysqli_real_escape_string($db, $longitude) . "',
+                              '" . mysqli_real_escape_string($db, $verification_code) . "',
+                              0
+                            )";
 
       if (mysqli_query($db, $insert_user_query)) {
-        // Redirect to login page after successful registration
-        redirect_to(url_for('/member/login.php?registered=1'));
+        // Send the code via email
+        $to = $email;
+        $subject = "Your CropX Verification Code";
+        $message = "Hello $name,\n\nYour verification code is: $verification_code\nPlease enter this code to verify your account.";
+        $headers = "From: no-reply@cropx.com";
+
+        //https://www.w3schools.com/php/func_mail_mail.asp
+        mail($to, $subject, $message, $headers);
+
+        // Redirect to code verification page
+        redirect_to(url_for('/member/verify_code.php?email=' . urlencode($email)));
       } else {
         $errors[] = 'Registration failed: ' . mysqli_error($db);
       }

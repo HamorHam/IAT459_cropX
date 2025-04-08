@@ -14,7 +14,7 @@ if (is_post_request()) {
   $password = $_POST['password'] ?? '';
 
   // Look up the user by username
-  $query = "SELECT * FROM user WHERE Name = ?";
+  $query = "SELECT * FROM user WHERE Name = ? AND IsVerified = 1";
   $stmt = $db->prepare($query);
   $stmt->bind_param("s", $username);
   $stmt->execute();
@@ -43,7 +43,7 @@ if (is_post_request()) {
 <div id="content" style="display:flex;align-items:center;justify-content:center;flex-direction:column">
   <h1>Login</h1>
 
-  <?php if (isset($_GET['registered'])): ?>
+  <?php if (isset($_GET['registered']) || isset($_GET['verified'])): ?>
     <p style="color: green; font-weight: bold; margin-bottom: 1rem;">
       Registration successful. Please log in.
     </p>
