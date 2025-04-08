@@ -308,5 +308,20 @@
     return $result;
   }
 
+  // Find the plant that have been commented on
+  // This function retrieves distinct plant names from the comments table
+  function find_commented_plants_by_user($user_id) {
+    global $db;
+  
+    $sql = "SELECT DISTINCT PlantName 
+            FROM comments 
+            WHERE IsApproved = 1 AND UserID = '" . mysqli_real_escape_string($db, $user_id) . "' 
+            ORDER BY PlantName ASC";
+  
+    $result = mysqli_query($db, $sql);
+    confirm_result_set($result);
+    return $result;
+  }
+
 
 ?>
