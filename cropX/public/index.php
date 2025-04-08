@@ -17,6 +17,8 @@ if (isset($_SESSION['username'])) {
 
 
 <div id="content">
+
+  <a class="btn" style="margin-top:2em" href="<?php echo url_for('/filter.php'); ?>">Filter</a>
   
   <div id="plant-list">
     <p>Loading plants...</p>

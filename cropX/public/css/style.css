@@ -151,7 +151,7 @@ footer{
   background: #fff;
 }
 
-.nav-search button {
+.nav-search button, .btn {
   transition: background-color 0.3s ease;
   padding: 0.6em 1.2em;
   border: none;
@@ -159,7 +159,8 @@ footer{
   color: #fff;
   border-radius: 20px;
   cursor: pointer;
-  font-size: 16px
+  font-size: 16px;
+  text-decoration: none;
 }
 
 /*https://css-tricks.com/almanac/pseudo-selectors/p/placeholder/*/
