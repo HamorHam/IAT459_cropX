@@ -631,12 +631,12 @@ if (is_post_request() && isset($_POST['content'])) {
     {
       if (!isset($comments_by_parent[$parent_id]))
         return;
-      echo "<ul>";
+      echo '<ul class="comment-list">';
       foreach ($comments_by_parent[$parent_id] as $comment) {
         echo "<li>";
-        echo "<p><strong>" . h($comment['UserName'] ?? 'Anonymous') . "</strong> on " . h($comment['CommentDate']) . "</p>";
-        echo "<p>" . nl2br(h($comment['Content'])) . "</p>";
-        echo "<button class='reply-btn' data-id='" . h($comment['CommentID']) . "'>Reply</button>";
+        echo '<div class="comment-meta"><span>' . h($comment['UserName'] ?? 'Anonymous') . "</span> on <i>" . h($comment['CommentDate']) . "</i></div>";
+        echo '<div class="comment-content">' . nl2br(h($comment['Content'])) . "</div>";
+        echo "<div class='replyDiv'><button class='reply-btn' data-id='" . h($comment['CommentID']) . "'>Reply</button><div>";
         // Render nested replies
         render_comments($comment['CommentID'], $comments_by_parent);
         echo "</li>";
@@ -660,9 +660,8 @@ if (is_post_request() && isset($_POST['content'])) {
       <form id="comment-form">
         <input type="hidden" name="plant_name" value="<?php echo h($plant_name); ?>" />
         <input type="hidden" name="parent_comment_id" id="parent_comment_id" value="0" />
-        <label for="content">Comment:</label><br />
         <textarea name="content" required rows="5" cols="50"></textarea><br />
-        <input type="submit" value="Submit Comment" />
+        <button type="submit" value="Submit Comment">Submit Comment</button>
       </form>
     <?php else: ?>
       <p>Please <a href="<?php echo url_for('/member/login.php'); ?>">login</a> to add a comment.</p>
