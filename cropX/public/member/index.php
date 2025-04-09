@@ -98,6 +98,9 @@ include(SHARED_PATH . '/member_header.php');
     <label for="username">Username:</label>
     <input type="text" name="username" value="<?php echo h($current_user['Name']); ?>" required>
     
+    <label style="display:none" for="email">Email:</label>
+    <input style="display:none" type="email" name="email" value="<?php echo h($current_user['Email']); ?>" required>
+    
     <label for="latitude">Latitude:</label>
     <input type="text" name="latitude" value="<?php echo h($current_user['Latitude']); ?>">
     

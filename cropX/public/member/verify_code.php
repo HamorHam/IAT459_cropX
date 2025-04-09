@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php $page_title = 'Verify Email'; ?>
 <?php include(SHARED_PATH . '/public_header.php'); ?>
 
-<div id="content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:3em">
+<div id="content" style="display:flex;flex-direction:column;align-items:center;justify-content:center">
   <h1>Verify Your Email</h1>
 
   <?php if (!empty($errors)): ?>
