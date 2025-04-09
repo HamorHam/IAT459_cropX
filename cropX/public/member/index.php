@@ -38,7 +38,6 @@ if (is_post_request()) {
   if (isset($_POST['update_info'])) {
     // Get fields from POST
     $username  = $_POST['username'] ?? '';
-    $email     = $_POST['email'] ?? '';
     $latitude  = $_POST['latitude'] ?? '';
     $longitude = $_POST['longitude'] ?? '';
 
@@ -56,7 +55,6 @@ if (is_post_request()) {
     if (empty($errors)) {
       $update_query = "UPDATE user SET 
         Name = '" . mysqli_real_escape_string($db, $username) . "',
-        Email = '" . mysqli_real_escape_string($db, $email) . "',
         Latitude = '" . mysqli_real_escape_string($db, $latitude) . "',
         Longitude = '" . mysqli_real_escape_string($db, $longitude) . "'
         WHERE UserID = " . intval($user_id);
@@ -99,9 +97,6 @@ include(SHARED_PATH . '/member_header.php');
   <form style="display:grid;grid-template-columns:repeat(2, 50%);grid-template-rows:repeat(4, fit-content);gap:6px;max-width:800px" action="index.php" method="post">
     <label for="username">Username:</label>
     <input type="text" name="username" value="<?php echo h($current_user['Name']); ?>" required>
-    
-    <label for="email">Email:</label>
-    <input type="email" name="email" value="<?php echo h($current_user['Email']); ?>" required>
     
     <label for="latitude">Latitude:</label>
     <input type="text" name="latitude" value="<?php echo h($current_user['Latitude']); ?>">

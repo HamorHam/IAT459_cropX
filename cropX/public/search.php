@@ -12,6 +12,7 @@ if (isset($_SESSION['username'])) {
 $search_term = $_GET['q'] ?? '';
 $results = [];
 
+// https://www.w3schools.com/sql/sql_like.asp
 if (!is_blank($search_term)) {
   $safe_search = "%" . mysqli_real_escape_string($db, $search_term) . "%";
   $plant_query = "SELECT PlantName FROM plant 
