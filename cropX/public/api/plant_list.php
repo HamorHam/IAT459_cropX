@@ -3,6 +3,7 @@ require_once('../../private/initialize.php');
 header('Content-Type: application/json');
 
 // Ensure clean output
+//https://www.php.net/manual/en/function.ob-clean.php
 ob_clean();
 
 // Pagination parameters
