@@ -69,7 +69,7 @@ if (is_post_request()) {
   }
 }
 ?>
-
+<!-- Registration form -->
 <?php $page_title = 'Register'; ?>
 <?php include(SHARED_PATH . '/public_header.php'); ?>
 
