@@ -226,8 +226,7 @@ if (is_post_request() && isset($_POST['content'])) {
           $optWidth = (($optMax - $optMin) / $range) * 100;
           ?>
           <div class="mainBar">
-            <div class="optimal-range" 
-                style="left: <?php echo $leftOpt; ?>%; width: <?php echo $optWidth; ?>%">
+            <div class="optimal-range" style="left: <?php echo $leftOpt; ?>%; width: <?php echo $optWidth; ?>%">
             </div>
           </div>
           <div class="rangeLabels">
@@ -246,7 +245,7 @@ if (is_post_request() && isset($_POST['content'])) {
               <td class="rightAlign"><?php echo h($absMin); ?> - <?php echo h($absMax); ?> µmol/m²/s</td>
             </tr>
           </table>
-        <?php
+          <?php
         } else {
           echo "<p>No light intensity information available for this plant.</p>";
         }
@@ -256,44 +255,46 @@ if (is_post_request() && isset($_POST['content'])) {
       <div class="card" style="grid-column:span 2">
         <h3>Latitude</h3>
         <?php
-          $absMin = $plant['LatitudeAbsoluteMin'];
-          $absMax = $plant['LatitudeAbsoluteMax'];
-          $optMin = $plant['LatitudeOptimalMin'];
-          $optMax = $plant['LatitudeOptimalMax'];
-          $has_any_data = is_numeric($absMin) && is_numeric($absMax) && is_numeric($optMin) && is_numeric($optMax);
-          $show_abs = ($absMin != 0 || $absMax != 0);
-          $show_opt = ($optMin != 0 || $optMax != 0);
-          function latToPosition($lat) {
-            if ($lat >= 0) {
-              // northern hemisphere
-              return 50 - (sin(deg2rad($lat)) * 50);
-            } else {
-              //southern hemisphere
-              return 50 + (sin(deg2rad(abs($lat))) * 50);
-            }
+        $absMin = $plant['LatitudeAbsoluteMin'];
+        $absMax = $plant['LatitudeAbsoluteMax'];
+        $optMin = $plant['LatitudeOptimalMin'];
+        $optMax = $plant['LatitudeOptimalMax'];
+        $has_any_data = is_numeric($absMin) && is_numeric($absMax) && is_numeric($optMin) && is_numeric($optMax);
+        $show_abs = ($absMin != 0 || $absMax != 0);
+        $show_opt = ($optMin != 0 || $optMax != 0);
+        function latToPosition($lat)
+        {
+          if ($lat >= 0) {
+            // northern hemisphere
+            return 50 - (sin(deg2rad($lat)) * 50);
+          } else {
+            //southern hemisphere
+            return 50 + (sin(deg2rad(abs($lat))) * 50);
           }
+        }
         ?>
         <?php if ($has_any_data && ($show_abs || $show_opt)): ?>
           <div class="map-wrapper">
           <img src="<?php echo url_for('/img/lat-map.png'); ?>" alt="World Map" class="map-image" />
+
             <?php if ($show_abs): ?>
-              <div class="lat-band abs-range" 
-                  style="top: <?php echo latToPosition($absMax); ?>%; 
-                        height: <?php echo latToPosition($absMin) - latToPosition($absMax); ?>%;">
+              <div class="lat-band abs-range" style="top: <?php echo latToPosition($absMax); ?>%; 
+                  height: <?php echo latToPosition($absMin) - latToPosition($absMax); ?>%;">
               </div>
             <?php endif; ?>
+
             <?php if ($show_opt): ?>
-              <div class="lat-band opt-range" 
-                  style="top: <?php echo latToPosition($optMin); ?>%; 
-                        height: <?php echo latToPosition($optMax) - latToPosition($optMin); ?>%;">
+              <div class="lat-band opt-range" style="top: <?php echo latToPosition($optMin); ?>%; 
+                  height: <?php echo latToPosition($optMax) - latToPosition($optMin); ?>%;">
               </div>
             <?php endif; ?>
-            <?php if (isset($_SESSION['username'])): ?>
-              <div class="user-latitude" 
-                  style="top: <?php echo latToPosition($user['Latitude']); ?>%;">
+
+            <?php if (isset($_SESSION['username']) && isset($user) && isset($user['Latitude'])): ?>
+              <div class="user-latitude" style="top: <?php echo latToPosition($user['Latitude']); ?>%;">
               </div>
             <?php endif; ?>
           </div>
+
           <table>
             <?php if ($show_opt): ?>
               <tr>
@@ -307,10 +308,10 @@ if (is_post_request() && isset($_POST['content'])) {
                 <td class="rightAlign"><?php echo h($absMin); ?> - <?php echo h($absMax); ?>°</td>
               </tr>
             <?php endif; ?>
-            <?php if ($user['Latitude'] && isset($_SESSION['username'])): ?>
+            <?php if (isset($_SESSION['username']) && isset($user) && isset($user['Latitude'])): ?>
               <tr>
                 <th>Your Latitude</th>
-                <td class="rightAlign"><?php echo $user['Latitude']; ?>°</td>
+                <td class="rightAlign"><?php echo h($user['Latitude']); ?>°</td>
               </tr>
             <?php endif; ?>
           </table>
@@ -321,7 +322,7 @@ if (is_post_request() && isset($_POST['content'])) {
 
       <div class="card" style="grid-column:span 2">
         <h3>Environmental Conditions</h3>
-        <hr class="line"/>
+        <hr class="line" />
         <table>
           <?php if ($plant['KillingTemp_DuringRest'] !== null): ?>
             <tr>
@@ -397,7 +398,7 @@ if (is_post_request() && isset($_POST['content'])) {
 
       <div class="card" style="grid-column:span 2">
         <h3>Soil Properties</h3>
-        <hr class="line"/>
+        <hr class="line" />
         <table>
           <?php if ($plant['SoilPHOptimalMin'] !== null && $plant['SoilPHOptimalMax'] !== null): ?>
             <tr>
@@ -487,49 +488,76 @@ if (is_post_request() && isset($_POST['content'])) {
 
       <div class="card" style="grid-column:span 2">
         <h3>General Plant Info</h3>
-        <hr class="line"/>
+        <hr class="line" />
         <table>
           <?php if ($plant['LifeForm']): ?>
-            <tr><th>Life Form</th><td><?php echo h($plant['LifeForm']); ?></td></tr>
+            <tr>
+              <th>Life Form</th>
+              <td><?php echo h($plant['LifeForm']); ?></td>
+            </tr>
           <?php endif; ?>
 
           <?php if ($plant['Physiology']): ?>
-            <tr><th>Physiology</th><td><?php echo h($plant['Physiology']); ?></td></tr>
+            <tr>
+              <th>Physiology</th>
+              <td><?php echo h($plant['Physiology']); ?></td>
+            </tr>
           <?php endif; ?>
 
           <?php if ($plant['Habit']): ?>
-            <tr><th>Habit</th><td><?php echo h($plant['Habit']); ?></td></tr>
+            <tr>
+              <th>Habit</th>
+              <td><?php echo h($plant['Habit']); ?></td>
+            </tr>
           <?php endif; ?>
 
           <?php if ($plant['Category']): ?>
-            <tr><th>Category</th><td><?php echo h($plant['Category']); ?></td></tr>
+            <tr>
+              <th>Category</th>
+              <td><?php echo h($plant['Category']); ?></td>
+            </tr>
           <?php endif; ?>
 
           <?php if ($plant['LifeSpan']): ?>
-            <tr><th>Life Span</th><td><?php echo h($plant['LifeSpan']); ?></td></tr>
+            <tr>
+              <th>Life Span</th>
+              <td><?php echo h($plant['LifeSpan']); ?></td>
+            </tr>
           <?php endif; ?>
 
           <?php if ($plant['PlantAttributes']): ?>
-            <tr><th>Plant Attributes</th><td><?php echo h($plant['PlantAttributes']); ?></td></tr>
+            <tr>
+              <th>Plant Attributes</th>
+              <td><?php echo h($plant['PlantAttributes']); ?></td>
+            </tr>
           <?php endif; ?>
 
           <?php if ($plant['GrowingPeriod']): ?>
-            <tr><th>Growing Period</th><td><?php echo h($plant['GrowingPeriod']); ?></td></tr>
+            <tr>
+              <th>Growing Period</th>
+              <td><?php echo h($plant['GrowingPeriod']); ?></td>
+            </tr>
           <?php endif; ?>
 
           <?php if ($plant['CropCycle_Min'] !== null && $plant['CropCycle_Max'] !== null): ?>
-            <tr><th>Crop Cycle</th><td><?php echo h($plant['CropCycle_Min']); ?> - <?php echo h($plant['CropCycle_Max']); ?> days</td></tr>
+            <tr>
+              <th>Crop Cycle</th>
+              <td><?php echo h($plant['CropCycle_Min']); ?> - <?php echo h($plant['CropCycle_Max']); ?> days</td>
+            </tr>
           <?php endif; ?>
 
           <?php if ($plant['ProductSystem']): ?>
-            <tr><th>Product System</th><td><?php echo h($plant['ProductSystem']); ?></td></tr>
+            <tr>
+              <th>Product System</th>
+              <td><?php echo h($plant['ProductSystem']); ?></td>
+            </tr>
           <?php endif; ?>
         </table>
       </div>
 
       <div class="card" style="grid-column:span 2">
         <h3>Further Information</h3>
-        <hr class="line"/>
+        <hr class="line" />
         <?php if ($plant['FurtherInformation']): ?>
           <p><?php echo nl2br(h($plant['FurtherInformation'])); ?></p>
         <?php else: ?>
@@ -539,7 +567,7 @@ if (is_post_request() && isset($_POST['content'])) {
 
       <div class="card" style="grid-column:span 2">
         <h3>Sources</h3>
-        <hr class="line"/>
+        <hr class="line" />
         <?php if ($plant['FinalSource']): ?>
           <p><?php echo nl2br(h($plant['FinalSource'])); ?></p>
         <?php endif; ?>
@@ -547,48 +575,48 @@ if (is_post_request() && isset($_POST['content'])) {
 
       <div class="card" style="grid-column:span 3">
         <h3>Uses</h3>
-        <hr class="line"/>
+        <hr class="line" />
         <?php
-          // Retrieve uses details
-          $uses_query = "SELECT UseID, MainUse, DetailedUse, UsedPart FROM plant_uses 
+        // Retrieve uses details
+        $uses_query = "SELECT UseID, MainUse, DetailedUse, UsedPart FROM plant_uses 
                         WHERE PlantName = '" . mysqli_real_escape_string($db, $plant_name) . "' 
                         ORDER BY UseID";
-          $uses_result = mysqli_query($db, $uses_query);
-          if (mysqli_num_rows($uses_result) > 0 || $plant['Uses'] != NULL):
-            ?>
-            <?php echo "<p>" . ($plant['Uses']) . "</p>"; ?>
-            <table>
+        $uses_result = mysqli_query($db, $uses_query);
+        if (mysqli_num_rows($uses_result) > 0 || $plant['Uses'] != NULL):
+          ?>
+          <?php echo "<p>" . ($plant['Uses']) . "</p>"; ?>
+          <table>
+            <tr>
+              <th>Main Use</th>
+              <th>Detailed Use</th>
+              <th>Used Part</th>
+            </tr>
+            <?php while ($use = mysqli_fetch_assoc($uses_result)): ?>
               <tr>
-                <th>Main Use</th>
-                <th>Detailed Use</th>
-                <th>Used Part</th>
+                <td><?php echo h($use['MainUse']); ?></td>
+                <td><?php echo h($use['DetailedUse']); ?></td>
+                <td><?php echo h($use['UsedPart']); ?></td>
               </tr>
-              <?php while ($use = mysqli_fetch_assoc($uses_result)): ?>
-                <tr>
-                  <td><?php echo h($use['MainUse']); ?></td>
-                  <td><?php echo h($use['DetailedUse']); ?></td>
-                  <td><?php echo h($use['UsedPart']); ?></td>
-                </tr>
-              <?php endwhile; ?>
-            </table>
-          <?php else: ?>
-            <p>No uses available for this plant.</p>
-          <?php endif; ?>
+            <?php endwhile; ?>
+          </table>
+        <?php else: ?>
+          <p>No uses available for this plant.</p>
+        <?php endif; ?>
       </div>
 
       <div class="card" style="grid-column:span 3">
         <h3>Specific Cultivation</h3>
-        <hr class="line"/>
+        <hr class="line" />
         <?php
-          // Retrieve specific cultivation data
-          $cultivation_query = "SELECT Subsystem, CompanionSpecies, LevelOfMechanization, LabourIntensity 
+        // Retrieve specific cultivation data
+        $cultivation_query = "SELECT Subsystem, CompanionSpecies, LevelOfMechanization, LabourIntensity 
                                 FROM specific_cultivation 
                                 WHERE PlantName = '" . mysqli_real_escape_string($db, $plant_name) . "' 
                                 ORDER BY CultivationID";
-          $cultivation_result = mysqli_query($db, $cultivation_query);
+        $cultivation_result = mysqli_query($db, $cultivation_query);
 
-          if (mysqli_num_rows($cultivation_result) > 0):
-        ?>
+        if (mysqli_num_rows($cultivation_result) > 0):
+          ?>
           <table>
             <tr>
               <th>Subsystem</th>
@@ -611,10 +639,10 @@ if (is_post_request() && isset($_POST['content'])) {
       </div>
     </div>
 
-    <br/>
-    <br/>
+    <br />
+    <br />
     <h3>Comments</h3>
-    <hr class="line"/>
+    <hr class="line" />
     <?php
     // Fetch all approved comments for this plant
     $comments_query = "SELECT c.*, u.Name AS UserName FROM comments c
