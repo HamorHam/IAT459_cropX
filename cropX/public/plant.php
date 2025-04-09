@@ -275,7 +275,7 @@ if (is_post_request() && isset($_POST['content'])) {
         ?>
         <?php if ($has_any_data && ($show_abs || $show_opt)): ?>
           <div class="map-wrapper">
-            <img src="/IAT459_CROPX/cropX/public/img/lat-map.png" alt="World Map" class="map-image" />
+          <img src="<?php echo url_for('/img/lat-map.png'); ?>" alt="World Map" class="map-image" />
             <?php if ($show_abs): ?>
               <div class="lat-band abs-range" 
                   style="top: <?php echo latToPosition($absMax); ?>%; 
