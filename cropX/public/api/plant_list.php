@@ -1,50 +1,54 @@
 <?php
+// Returns plant data as JSON
 require_once('../../private/initialize.php');
+
+// Set header type for JSON output
 header('Content-Type: application/json');
 
-// Ensure clean output
-//https://www.php.net/manual/en/function.ob-clean.php
+// Clean output buffer (if any)
 ob_clean();
 
-// Pagination parameters
-$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
-$limit = isset($_GET['limit']) && is_numeric($_GET['limit']) ? (int) $_GET['limit'] : 12;
+// Get and validate pagination parameters
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit = isset($_GET['limit']) && is_numeric($_GET['limit']) ? (int)$_GET['limit'] : 12;
 $page = max($page, 1);
 $limit = max($limit, 1);
 $offset = ($page - 1) * $limit;
 
-// latitude for sorting
+// Get users latitude for sorting
 $user_latitude = null;
 if (isset($_GET['latitude']) && is_numeric($_GET['latitude'])) {
-  $user_latitude = (float) $_GET['latitude'];
+    $user_latitude = (float) $_GET['latitude'];
 }
 
-// Determine ORDER BY clause
-$order_clause = "ORDER BY PlantName ASC"; // default alphabetical
+// Set default order by clause (alphabetical by plant name)
+$order_clause = "ORDER BY PlantName ASC";
+// If user latitude is provided, order by the distance of the average optimal latitude from user's latitude
 if (!is_null($user_latitude)) {
-  $order_clause = "ORDER BY ABS(((LatitudeOptimalMin + LatitudeOptimalMax) / 2) - {$user_latitude})";
+    $order_clause = "ORDER BY ABS(((LatitudeOptimalMin + LatitudeOptimalMax) / 2) - {$user_latitude})";
 }
 
-// Query total count for pagination
+// Get total plant count for pagination
 $count_sql = "SELECT COUNT(*) AS count FROM plant";
 $count_result = mysqli_query($db, $count_sql);
 $count_row = mysqli_fetch_assoc($count_result);
 $totalCount = (int) $count_row['count'];
 $totalPages = ceil($totalCount / $limit);
 
-// Query actual plant data
+// Query plant data (only basic fields for now)
 $data_sql = "SELECT PlantName, Family, Image FROM plant $order_clause LIMIT $limit OFFSET $offset";
 $data_result = mysqli_query($db, $data_sql);
 
 $plants = [];
 while ($row = mysqli_fetch_assoc($data_result)) {
-  $plants[] = $row;
+    $plants[] = $row;
 }
 
-// Output JSON response
+// Return JSON response with plant data and pagination info
+// https://www.w3schools.com/js/js_json_php.asp
 echo json_encode([
-  "plants" => $plants,
+  "plants"      => $plants,
   "currentPage" => $page,
-  "totalPages" => $totalPages
+  "totalPages"  => $totalPages
 ]);
 ?>
